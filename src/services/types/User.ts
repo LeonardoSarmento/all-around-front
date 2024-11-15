@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { roleSchema } from './Role';
 
 export const UserSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   name: z.string().min(3, { message: 'Nome muito curto' }).trim(),
   email: z.string().email({ message: 'E-mail inválido' }).trim(),
   company: z.string().trim().optional(),

@@ -4,27 +4,27 @@ import { roleSchema, RolesType } from '@services/types/Role';
 import { Filters, PaginatedData } from '@services/types/tables/FilterExtension';
 import { UserTableType } from '@services/types/tables/User';
 
-
 export type TaskFilters = Filters<UserTableType>;
 
 function makeData(amount: number): UserTableType[] {
   return Array(amount)
     .fill(0)
-    .map(() => {
+    .map((_, index) => {
       return {
-        id: faker.database.mongodbObjectId(),
+        id: index + 1,
         name: faker.person.fullName(),
         email: faker.internet.email(),
+        company: faker.company.name(),
         role: [faker.helpers.enumValue(roleSchema.enum)],
       };
     });
 }
 
-const data = makeData(1000);
+export const fakeUserData = makeData(1000);
 
 export async function fetchUsers(filtersAndPagination: TaskFilters): Promise<PaginatedData<UserTableType>> {
   const { pageIndex = DEFAULT_PAGE_INDEX, pageSize = DEFAULT_PAGE_SIZE, sortBy, ...filters } = filtersAndPagination;
-  const requestedData = data.slice();
+  const requestedData = fakeUserData.slice();
 
   if (sortBy) {
     const [field, order] = sortBy.split('.');

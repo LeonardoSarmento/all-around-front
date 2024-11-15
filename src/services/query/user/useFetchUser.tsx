@@ -1,10 +1,11 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
-import api from '@services/api/axios';
 import { UserType } from '@services/types/User';
+import { fakeUserData } from '@/fake-api/users';
 
-async function fetchUser(id: UserType['id']): Promise<UserType> {
-  const { data } = await api.get(`/persons/unique`, { params: { id } });
-  return data;
+function fetchUser(id: UserType['id']): UserType {
+  // const { data } = await api.get(`/persons/unique`, { params: { id } });
+  const data = fakeUserData.filter((user) => user.id === id)[0];
+  return { ...data, role: data.role[0] };
 }
 
 export const queryOptionsUser = (id: UserType['id']) => {

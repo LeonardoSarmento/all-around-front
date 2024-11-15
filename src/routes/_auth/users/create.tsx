@@ -11,6 +11,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 
 export const Route = createFileRoute('/_auth/users/create')({
+  loader: () => ({
+    crumb: 'Criar',
+  }),
   component: CreateUser,
 })
 

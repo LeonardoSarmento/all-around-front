@@ -33,7 +33,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
   return (
     <>
-      <div className="flex h-dvh w-screen flex-col">
+      <div>
         <ScrollRestoration getKey={(location) => location.pathname} />
         <Outlet />
       </div>

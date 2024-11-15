@@ -1,34 +1,39 @@
-import { ButtonGroup } from '@components/common/buttons/ButtonGroup'
-import DynamicForm from '@components/common/form/DynamicForm'
-import Header from '@components/header'
-import { Card, CardContent, CardFooter } from '@components/ui/card'
-import { Form } from '@components/ui/form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { roles } from '@services/constants/labels'
-import { queryOptionsUser } from '@services/query/user/useFetchUser'
-import { useMutateUser } from '@services/query/user/useMutateUser'
-import { UserSchema, UserType } from '@services/types/User'
-import { createFileRoute } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
+import { ButtonGroup } from '@components/common/buttons/ButtonGroup';
+import DynamicForm from '@components/common/form/DynamicForm';
+import Header from '@components/header';
+import { Card, CardContent, CardFooter } from '@components/ui/card';
+import { Form } from '@components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { roles } from '@services/constants/labels';
+import { queryOptionsUser } from '@services/query/user/useFetchUser';
+import { useMutateUser } from '@services/query/user/useMutateUser';
+import { UserSchema, UserType } from '@services/types/User';
+import { createFileRoute } from '@tanstack/react-router';
+import { useForm } from 'react-hook-form';
 
 export const Route = createFileRoute('/_auth/users/$userId')({
-  loader: ({ context: { queryClient }, params: { userId } }) =>
-    queryClient.ensureQueryData(queryOptionsUser(userId)),
+  loader: async ({ context: { queryClient }, params: { userId } }) => {
+    const data = await queryClient.ensureQueryData(queryOptionsUser(+userId));
+    return {
+      data,
+      crumb: data.name,
+    };
+  },
   component: EditUser,
-})
+});
 
 function EditUser() {
-  const userData = Route.useLoaderData()
+  const { data } = Route.useLoaderData();
   const form = useForm<UserType>({
     resolver: zodResolver(UserSchema),
     mode: 'onChange',
-    defaultValues: userData,
-  })
+    defaultValues: data,
+  });
 
-  const { mutate } = useMutateUser()
-  const onSubmit = form.handleSubmit((values) => mutate(values))
+  const { mutate } = useMutateUser();
+  const onSubmit = form.handleSubmit((values) => mutate(values));
   function handleReset() {
-    form.reset({ name: '', email: '', company: '', role: 'OPERATOR' })
+    form.reset({ name: '', email: '', company: '', role: 'OPERATOR' });
   }
   return (
     <div className="p-10">
@@ -76,14 +81,11 @@ function EditUser() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-center">
-              <ButtonGroup
-                clear={handleReset}
-                buttons={['edit', 'back', 'clear']}
-              />
+              <ButtonGroup clear={handleReset} buttons={['edit', 'back', 'clear']} />
             </CardFooter>
           </Card>
         </form>
       </Form>
     </div>
-  )
+  );
 }

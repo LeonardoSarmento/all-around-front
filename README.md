@@ -1,15 +1,22 @@
-# iee_551243-frontend
-Projeto Inovação Ecoeficiente. Aliança entre Marcopolo, Eaton e Cummins.
+# Template for front-end applications
+All around template for front-end applications
+
+### Features
+- Sidebar menu
+- DataTable
+- Calendar
+- URL Search Params
+- Async State Management
+- Typed Router
+- Form validation
+- Charts
 
 ### Main Techs
 
-- Router : `@tanstack/router-plugin` (^1.79.0)
-- State Managment : `@tanstack/query` (^5.59.16)
-
-### Project Techs
-
 - Language : `TypeScript` (~5.6.2)
 - Web Application framework : `Vite` (^5.4.9)
+- Router : `@tanstack/router-plugin` (^1.79.0)
+- State Managment : `@tanstack/query` (^5.59.16)
 - Charts : `recharts` (^2.13.0)
 - Form : `react-hook-form` (^7.53.1)
 - Validation : `zod` (^3.23.8)
