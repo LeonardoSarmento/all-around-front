@@ -1,11 +1,12 @@
 import { useRouter } from '@tanstack/react-router';
 import { CardContent, CardDescription, CardTitle } from './ui/card';
 import { Button } from './ui/button';
+import { SidebarComponent } from './sidebar';
 
 export function NotFoundComponent() {
   const router = useRouter();
   return (
-    <div className="flex min-h-screen w-screen flex-col justify-between">
+    <SidebarComponent>
       <div className="my-auto flex flex-col items-center justify-center gap-2">
         <CardContent className="flex flex-col items-center justify-center gap-3">
           <CardTitle className="mt-4">Ops... Parece que a URL foi escrita de forma incorreta</CardTitle>
@@ -32,6 +33,6 @@ export function NotFoundComponent() {
           </Button>
         </div>
       </div>
-    </div>
+    </SidebarComponent>
   );
 }

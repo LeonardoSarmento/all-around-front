@@ -15,7 +15,7 @@ export function UserToolbarAction({ className, ...props }: DataTableToolbarActio
       <Button
         onClick={() =>
           router.navigate({
-            to: '/',
+            to: '..',
           })
         }
         variant="outline"

@@ -60,7 +60,7 @@ export function NavProjects({ projects }: { projects: SidebarMenuOptions['projec
                       url: item.url,
                       messages: {
                         success: {
-                          title: 'Espalhe a palavra do template',
+                          title: `Espalhe a palavra do projeto ${item.title}`,
                           description: 'Link pronto para ser compartilhado',
                         },
                       },

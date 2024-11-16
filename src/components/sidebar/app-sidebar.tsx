@@ -1,16 +1,5 @@
 import * as React from 'react';
-import {
-  CalendarDays,
-  ChartLine,
-  Command,
-  ContactRound,
-  Languages,
-  ScanFace,
-  TableProperties,
-  Users,
-  type LucideIcon,
-} from 'lucide-react';
-
+import { type LucideIcon } from 'lucide-react';
 import { NavMain } from '@components/sidebar/nav-main';
 import { NavProjects } from '@components/sidebar/nav-projects';
 import { NavSecondary } from '@components/sidebar/nav-secondary';
@@ -63,13 +52,13 @@ const data: SidebarMenuOptions = {
     {
       title: 'Calendário',
       url: '/calendar',
-      icon: CalendarDays,
+      icon: Icons.calendar,
       isActive: true,
     },
     {
       title: 'Gráficos',
       url: '/charts',
-      icon: ChartLine,
+      icon: Icons.charts,
       isActive: true,
       items: [
         {
@@ -97,7 +86,7 @@ const data: SidebarMenuOptions = {
     {
       title: 'Usuários',
       url: '/users',
-      icon: Users,
+      icon: Icons.users,
       isActive: true,
       items: [
         {
@@ -132,22 +121,22 @@ const data: SidebarMenuOptions = {
     {
       title: 'Portfolio',
       url: 'https://leosarmento.com/',
-      icon: ContactRound,
+      icon: Icons.contactRound,
     },
     {
       title: 'Router',
       url: 'https://routing.leosarmento.com/',
-      icon: ScanFace,
+      icon: Icons.scanFace,
     },
     {
       title: 'Tabela',
       url: 'https://tables.leosarmento.com/',
-      icon: TableProperties,
+      icon: Icons.table,
     },
     {
       title: 'Internacionalização',
       url: 'https://i18n.leosarmento.com/',
-      icon: Languages,
+      icon: Icons.languages,
     },
   ],
 };
@@ -160,8 +149,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <Command className="size-4" />
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <Icons.logo className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Template Project</span>

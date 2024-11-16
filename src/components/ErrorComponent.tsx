@@ -1,11 +1,12 @@
 import { useRouter } from '@tanstack/react-router';
 import { CardContent, CardDescription, CardTitle } from './ui/card';
 import { Button } from './ui/button';
+import { SidebarComponent } from './sidebar';
 
 export function ErrorComponent() {
   const router = useRouter();
   return (
-    <div className="flex min-h-screen flex-col justify-between">
+    <SidebarComponent>
       <div className="flex flex-col items-center justify-center gap-2">
         <CardContent className="flex flex-col items-center justify-center gap-3">
           <CardTitle className="mt-4">Alguma coisa quebrou inesperadamente</CardTitle>
@@ -24,7 +25,7 @@ export function ErrorComponent() {
           <Button
             onClick={(e) => {
               e.preventDefault();
-              router.history.back();
+              router.navigate({ to: '..' });
             }}
             type="button"
           >
@@ -33,6 +34,6 @@ export function ErrorComponent() {
         </div>
       </div>
       <div />
-    </div>
+    </SidebarComponent>
   );
 }

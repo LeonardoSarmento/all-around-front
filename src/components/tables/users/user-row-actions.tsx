@@ -13,7 +13,7 @@ export function UserButtonAction<TData>({ row }: DataTableRowActionsProps<TData>
         onClick={() =>
           router.navigate({
             to: '/users/$userId',
-            params: { userId: user.id },
+            params: { userId: `${user.id}` },
           })
         }
         variant="outline"
