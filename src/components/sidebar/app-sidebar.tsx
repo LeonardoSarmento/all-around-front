@@ -56,6 +56,12 @@ const data: SidebarMenuOptions = {
       isActive: true,
     },
     {
+      title: 'Componentes',
+      url: '/components',
+      icon: Icons.component,
+      isActive: true,
+    },
+    {
       title: 'Gráficos',
       url: '/charts',
       icon: Icons.charts,

@@ -99,16 +99,16 @@ export type DynamicFormType<TFieldValues extends FieldValues> = z.infer<typeof p
 export const DynamicSchemaTestingComponent = z.object({
   input: z
     .string({
-      required_error: 'Please input content is required.',
+      required_error: 'Conteúdo é obrigatório.',
     })
-    .min(2, { message: 'Content must be at least 2 characters' })
+    .min(2, { message: 'Conteúdo deve ter no mínimo 2 caracteres' })
     .trim(),
   password: z
     .string({
-      required_error: 'Please password content is required.',
+      required_error: 'Por favor, insira uma senha.',
     })
-    .min(3, { message: 'Content must be at least 3 characters' })
-    .max(14, { message: 'Password is too long' })
+    .min(3, { message: 'Senha deve ter no mínimo 3 caracteres' })
+    .max(14, { message: 'Senha deve ter no máximo 14 caracteres' })
     .trim(),
   checkbox: CheckboxSchema,
   combobox: ComboboxSchema,

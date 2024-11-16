@@ -34,7 +34,7 @@ export const userColumns: ColumnDef<UserTableType>[] = [
     cell: ({ row }) => <div>{row.getValue('id')}</div>,
     enableSorting: false,
     enableHiding: false,
-    meta: { filterKey: 'id', name: 'Id' },
+    meta: { filterKey: 'id', name: 'Id', filterVariant: 'number' },
   },
   {
     accessorKey: 'name',

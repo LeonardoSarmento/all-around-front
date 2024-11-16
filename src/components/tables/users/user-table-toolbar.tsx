@@ -22,13 +22,13 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             className="h-8 w-[150px] rounded border shadow lg:w-[150px]"
             onChange={(value) => {
               setFilters({
-                [fieldMetaId.filterKey as keyof UserFilters]: value,
+                [fieldMetaId.filterKey as keyof UserFilters['id']]: value,
               } as Partial<TData>);
             }}
             onClick={(e) => e.stopPropagation()}
             type={fieldMetaId.filterVariant === 'number' ? 'number' : 'text'}
             placeholder="Procure pelo id"
-            value={(filters[fieldMetaId.filterKey as keyof UserFilters] as string) ?? ''}
+            value={filters[fieldMetaId.filterKey as keyof UserFilters['id']] ?? ''}
           />
         ) : null}
         {table.getColumn('name')?.getCanFilter() && fieldMetaName?.filterKey !== undefined ? (
@@ -42,7 +42,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             onClick={(e) => e.stopPropagation()}
             type={fieldMetaName.filterVariant === 'number' ? 'number' : 'text'}
             placeholder="Procure pelo nome"
-            value={(filters[fieldMetaName.filterKey as keyof UserFilters] as string) ?? ''}
+            value={filters[fieldMetaName.filterKey as keyof UserFilters['name']] ?? ''}
           />
         ) : null}
         {table.getColumn('email')?.getCanFilter() && fieldMetaEmail?.filterKey !== undefined ? (
@@ -56,7 +56,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             onClick={(e) => e.stopPropagation()}
             type={fieldMetaEmail.filterVariant === 'number' ? 'number' : 'text'}
             placeholder="Procure pelo email"
-            value={(filters[fieldMetaEmail.filterKey as keyof UserFilters] as string) ?? ''}
+            value={filters[fieldMetaEmail.filterKey as keyof UserFilters['email']] ?? ''}
           />
         ) : null}
         {table.getColumn('role') && (

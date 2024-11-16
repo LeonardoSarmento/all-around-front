@@ -34,6 +34,7 @@ export function UserAuthForm({ ...props }: UserAuthFormProps) {
                   name="email"
                   placeholder="E-mail"
                   type="input"
+                  description='Apenas escreva um email válido e acesse tudo que temos disponível :)'
                 />
                 <DynamicForm
                   control={form.control}

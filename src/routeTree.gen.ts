@@ -14,9 +14,11 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthUsersImport } from './routes/_auth/users'
+import { Route as AuthComponentsImport } from './routes/_auth/components'
 import { Route as AuthChartsImport } from './routes/_auth/charts'
 import { Route as AuthCalendarImport } from './routes/_auth/calendar'
 import { Route as AuthUsersIndexImport } from './routes/_auth/users/index'
+import { Route as AuthComponentsIndexImport } from './routes/_auth/components/index'
 import { Route as AuthChartsIndexImport } from './routes/_auth/charts/index'
 import { Route as AuthCalendarIndexImport } from './routes/_auth/calendar/index'
 import { Route as AuthUsersCreateImport } from './routes/_auth/users/create'
@@ -43,6 +45,12 @@ const AuthUsersRoute = AuthUsersImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
+const AuthComponentsRoute = AuthComponentsImport.update({
+  id: '/components',
+  path: '/components',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 const AuthChartsRoute = AuthChartsImport.update({
   id: '/charts',
   path: '/charts',
@@ -59,6 +67,12 @@ const AuthUsersIndexRoute = AuthUsersIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthUsersRoute,
+} as any)
+
+const AuthComponentsIndexRoute = AuthComponentsIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthComponentsRoute,
 } as any)
 
 const AuthChartsIndexRoute = AuthChartsIndexImport.update({
@@ -122,6 +136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthChartsImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/components': {
+      id: '/_auth/components'
+      path: '/components'
+      fullPath: '/components'
+      preLoaderRoute: typeof AuthComponentsImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/users': {
       id: '/_auth/users'
       path: '/users'
@@ -178,6 +199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthChartsIndexImport
       parentRoute: typeof AuthChartsImport
     }
+    '/_auth/components/': {
+      id: '/_auth/components/'
+      path: '/'
+      fullPath: '/components/'
+      preLoaderRoute: typeof AuthComponentsIndexImport
+      parentRoute: typeof AuthComponentsImport
+    }
     '/_auth/users/': {
       id: '/_auth/users/'
       path: '/'
@@ -218,6 +246,18 @@ const AuthChartsRouteWithChildren = AuthChartsRoute._addFileChildren(
   AuthChartsRouteChildren,
 )
 
+interface AuthComponentsRouteChildren {
+  AuthComponentsIndexRoute: typeof AuthComponentsIndexRoute
+}
+
+const AuthComponentsRouteChildren: AuthComponentsRouteChildren = {
+  AuthComponentsIndexRoute: AuthComponentsIndexRoute,
+}
+
+const AuthComponentsRouteWithChildren = AuthComponentsRoute._addFileChildren(
+  AuthComponentsRouteChildren,
+)
+
 interface AuthUsersRouteChildren {
   AuthUsersUserIdRoute: typeof AuthUsersUserIdRoute
   AuthUsersCreateRoute: typeof AuthUsersCreateRoute
@@ -237,6 +277,7 @@ const AuthUsersRouteWithChildren = AuthUsersRoute._addFileChildren(
 interface AuthRouteChildren {
   AuthCalendarRoute: typeof AuthCalendarRouteWithChildren
   AuthChartsRoute: typeof AuthChartsRouteWithChildren
+  AuthComponentsRoute: typeof AuthComponentsRouteWithChildren
   AuthUsersRoute: typeof AuthUsersRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
 }
@@ -244,6 +285,7 @@ interface AuthRouteChildren {
 const AuthRouteChildren: AuthRouteChildren = {
   AuthCalendarRoute: AuthCalendarRouteWithChildren,
   AuthChartsRoute: AuthChartsRouteWithChildren,
+  AuthComponentsRoute: AuthComponentsRouteWithChildren,
   AuthUsersRoute: AuthUsersRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
 }
@@ -254,6 +296,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
   '/calendar': typeof AuthCalendarRouteWithChildren
   '/charts': typeof AuthChartsRouteWithChildren
+  '/components': typeof AuthComponentsRouteWithChildren
   '/users': typeof AuthUsersRouteWithChildren
   '/': typeof AuthIndexRoute
   '/charts/bar': typeof AuthChartsBarRoute
@@ -262,6 +305,7 @@ export interface FileRoutesByFullPath {
   '/users/create': typeof AuthUsersCreateRoute
   '/calendar/': typeof AuthCalendarIndexRoute
   '/charts/': typeof AuthChartsIndexRoute
+  '/components/': typeof AuthComponentsIndexRoute
   '/users/': typeof AuthUsersIndexRoute
 }
 
@@ -273,6 +317,7 @@ export interface FileRoutesByTo {
   '/users/create': typeof AuthUsersCreateRoute
   '/calendar': typeof AuthCalendarIndexRoute
   '/charts': typeof AuthChartsIndexRoute
+  '/components': typeof AuthComponentsIndexRoute
   '/users': typeof AuthUsersIndexRoute
 }
 
@@ -281,6 +326,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_auth/calendar': typeof AuthCalendarRouteWithChildren
   '/_auth/charts': typeof AuthChartsRouteWithChildren
+  '/_auth/components': typeof AuthComponentsRouteWithChildren
   '/_auth/users': typeof AuthUsersRouteWithChildren
   '/_auth/': typeof AuthIndexRoute
   '/_auth/charts/bar': typeof AuthChartsBarRoute
@@ -289,6 +335,7 @@ export interface FileRoutesById {
   '/_auth/users/create': typeof AuthUsersCreateRoute
   '/_auth/calendar/': typeof AuthCalendarIndexRoute
   '/_auth/charts/': typeof AuthChartsIndexRoute
+  '/_auth/components/': typeof AuthComponentsIndexRoute
   '/_auth/users/': typeof AuthUsersIndexRoute
 }
 
@@ -298,6 +345,7 @@ export interface FileRouteTypes {
     | ''
     | '/calendar'
     | '/charts'
+    | '/components'
     | '/users'
     | '/'
     | '/charts/bar'
@@ -306,6 +354,7 @@ export interface FileRouteTypes {
     | '/users/create'
     | '/calendar/'
     | '/charts/'
+    | '/components/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -316,12 +365,14 @@ export interface FileRouteTypes {
     | '/users/create'
     | '/calendar'
     | '/charts'
+    | '/components'
     | '/users'
   id:
     | '__root__'
     | '/_auth'
     | '/_auth/calendar'
     | '/_auth/charts'
+    | '/_auth/components'
     | '/_auth/users'
     | '/_auth/'
     | '/_auth/charts/bar'
@@ -330,6 +381,7 @@ export interface FileRouteTypes {
     | '/_auth/users/create'
     | '/_auth/calendar/'
     | '/_auth/charts/'
+    | '/_auth/components/'
     | '/_auth/users/'
   fileRoutesById: FileRoutesById
 }
@@ -360,6 +412,7 @@ export const routeTree = rootRoute
       "children": [
         "/_auth/calendar",
         "/_auth/charts",
+        "/_auth/components",
         "/_auth/users",
         "/_auth/"
       ]
@@ -378,6 +431,13 @@ export const routeTree = rootRoute
         "/_auth/charts/bar",
         "/_auth/charts/line",
         "/_auth/charts/"
+      ]
+    },
+    "/_auth/components": {
+      "filePath": "_auth/components.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/components/"
       ]
     },
     "/_auth/users": {
@@ -416,6 +476,10 @@ export const routeTree = rootRoute
     "/_auth/charts/": {
       "filePath": "_auth/charts/index.tsx",
       "parent": "/_auth/charts"
+    },
+    "/_auth/components/": {
+      "filePath": "_auth/components/index.tsx",
+      "parent": "/_auth/components"
     },
     "/_auth/users/": {
       "filePath": "_auth/users/index.tsx",

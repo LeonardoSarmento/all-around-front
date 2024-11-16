@@ -2,7 +2,7 @@ import Header from '@components/header';
 import { Link, Outlet, createFileRoute, linkOptions } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_auth/')({
-  component: UsersComponent,
+  component: IndexComponent,
 });
 
 const options = [
@@ -17,6 +17,11 @@ const options = [
     activeOptions: { exact: true },
   }),
   linkOptions({
+    to: '/components',
+    label: 'Componentes',
+    activeOptions: { exact: true },
+  }),
+  linkOptions({
     to: '/charts',
     label: 'Gráficos',
     activeOptions: { exact: true },
@@ -28,7 +33,7 @@ const options = [
   }),
 ];
 
-function UsersComponent() {
+function IndexComponent() {
   return (
     <>
       <Header title="Bem vindo," description="Aproveite esse template preparado com muito carinho" />

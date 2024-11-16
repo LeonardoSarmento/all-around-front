@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const RadioSchema = z.string({
-  required_error: 'Selecione uma opção.',
+  required_error: 'Selecione uma das opções.',
 });
 export type RadioType = z.infer<typeof RadioSchema>;
 
