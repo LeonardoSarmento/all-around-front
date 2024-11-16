@@ -39,7 +39,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function CO2EqChart() {
+export default function BarChartComponent() {
     return (
       <div className="flex h-[300px] justify-center">
         <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-[60%]">

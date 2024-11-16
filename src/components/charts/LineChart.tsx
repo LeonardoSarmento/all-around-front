@@ -71,10 +71,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function CO2TimelineChart() {
+export default function LineChartComponent() {
   return (
-    <div className="flex h-[300px] justify-center">
-      <ChartContainer config={chartConfig} className="aspect-auto h-[450px] w-[60%]">
+    <div className="flex h-[250px] justify-center">
+      <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-[80%]">
         <LineChart
           accessibilityLayer
           data={chartData}

@@ -12,6 +12,16 @@ const options = [
     activeOptions: { exact: true },
   }),
   linkOptions({
+    to: '/calendar',
+    label: 'Calendário',
+    activeOptions: { exact: true },
+  }),
+  linkOptions({
+    to: '/charts',
+    label: 'Gráficos',
+    activeOptions: { exact: true },
+  }),
+  linkOptions({
     to: '/users',
     label: 'Usuários',
     activeOptions: { exact: true },

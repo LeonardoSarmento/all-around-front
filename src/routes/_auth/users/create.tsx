@@ -40,7 +40,7 @@ function CreateUser() {
   }
   return (
     <>
-      <Header title="Novo Usuário: " user={form.watch('name')} />
+      <Header title="Novo Usuário(a): " user={form.watch('name')} />
       <Form {...form}>
         <form onSubmit={onSubmit}>
           <Card>

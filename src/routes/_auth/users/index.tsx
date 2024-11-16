@@ -31,7 +31,7 @@ function UsersComponent() {
 
   return (
     <>
-      <Header title="Usuários" description="Descrição de usuários" />
+      <Header title="Usuários" description="Listagem de todos os usuários da plataforma" />
       <DataTable
         data={data?.result ?? []}
         columns={columns}

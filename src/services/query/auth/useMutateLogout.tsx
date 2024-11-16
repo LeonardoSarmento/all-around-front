@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
-import api from '@services/api/axios';
 import { HandleError } from '@services/utils/handleError';
 import { useAuth } from '@services/hooks/auth';
 
 function Logout() {
-  return api.post(`/auth/logout`);
+  // return api.post(`/auth/logout`);
+  return Promise.resolve();
 }
 export const useMutateLogout = () => {
   const auth = useAuth();

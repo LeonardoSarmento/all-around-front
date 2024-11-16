@@ -14,9 +14,15 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth/index'
 import { Route as AuthUsersImport } from './routes/_auth/users'
+import { Route as AuthChartsImport } from './routes/_auth/charts'
+import { Route as AuthCalendarImport } from './routes/_auth/calendar'
 import { Route as AuthUsersIndexImport } from './routes/_auth/users/index'
+import { Route as AuthChartsIndexImport } from './routes/_auth/charts/index'
+import { Route as AuthCalendarIndexImport } from './routes/_auth/calendar/index'
 import { Route as AuthUsersCreateImport } from './routes/_auth/users/create'
 import { Route as AuthUsersUserIdImport } from './routes/_auth/users/$userId'
+import { Route as AuthChartsLineImport } from './routes/_auth/charts/line'
+import { Route as AuthChartsBarImport } from './routes/_auth/charts/bar'
 
 // Create/Update Routes
 
@@ -37,10 +43,34 @@ const AuthUsersRoute = AuthUsersImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
+const AuthChartsRoute = AuthChartsImport.update({
+  id: '/charts',
+  path: '/charts',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthCalendarRoute = AuthCalendarImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 const AuthUsersIndexRoute = AuthUsersIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthUsersRoute,
+} as any)
+
+const AuthChartsIndexRoute = AuthChartsIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthChartsRoute,
+} as any)
+
+const AuthCalendarIndexRoute = AuthCalendarIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthCalendarRoute,
 } as any)
 
 const AuthUsersCreateRoute = AuthUsersCreateImport.update({
@@ -55,6 +85,18 @@ const AuthUsersUserIdRoute = AuthUsersUserIdImport.update({
   getParentRoute: () => AuthUsersRoute,
 } as any)
 
+const AuthChartsLineRoute = AuthChartsLineImport.update({
+  id: '/line',
+  path: '/line',
+  getParentRoute: () => AuthChartsRoute,
+} as any)
+
+const AuthChartsBarRoute = AuthChartsBarImport.update({
+  id: '/bar',
+  path: '/bar',
+  getParentRoute: () => AuthChartsRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -65,6 +107,20 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
+    }
+    '/_auth/calendar': {
+      id: '/_auth/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof AuthCalendarImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/charts': {
+      id: '/_auth/charts'
+      path: '/charts'
+      fullPath: '/charts'
+      preLoaderRoute: typeof AuthChartsImport
+      parentRoute: typeof AuthImport
     }
     '/_auth/users': {
       id: '/_auth/users'
@@ -80,6 +136,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/charts/bar': {
+      id: '/_auth/charts/bar'
+      path: '/bar'
+      fullPath: '/charts/bar'
+      preLoaderRoute: typeof AuthChartsBarImport
+      parentRoute: typeof AuthChartsImport
+    }
+    '/_auth/charts/line': {
+      id: '/_auth/charts/line'
+      path: '/line'
+      fullPath: '/charts/line'
+      preLoaderRoute: typeof AuthChartsLineImport
+      parentRoute: typeof AuthChartsImport
+    }
     '/_auth/users/$userId': {
       id: '/_auth/users/$userId'
       path: '/$userId'
@@ -94,6 +164,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthUsersCreateImport
       parentRoute: typeof AuthUsersImport
     }
+    '/_auth/calendar/': {
+      id: '/_auth/calendar/'
+      path: '/'
+      fullPath: '/calendar/'
+      preLoaderRoute: typeof AuthCalendarIndexImport
+      parentRoute: typeof AuthCalendarImport
+    }
+    '/_auth/charts/': {
+      id: '/_auth/charts/'
+      path: '/'
+      fullPath: '/charts/'
+      preLoaderRoute: typeof AuthChartsIndexImport
+      parentRoute: typeof AuthChartsImport
+    }
     '/_auth/users/': {
       id: '/_auth/users/'
       path: '/'
@@ -105,6 +189,34 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
+
+interface AuthCalendarRouteChildren {
+  AuthCalendarIndexRoute: typeof AuthCalendarIndexRoute
+}
+
+const AuthCalendarRouteChildren: AuthCalendarRouteChildren = {
+  AuthCalendarIndexRoute: AuthCalendarIndexRoute,
+}
+
+const AuthCalendarRouteWithChildren = AuthCalendarRoute._addFileChildren(
+  AuthCalendarRouteChildren,
+)
+
+interface AuthChartsRouteChildren {
+  AuthChartsBarRoute: typeof AuthChartsBarRoute
+  AuthChartsLineRoute: typeof AuthChartsLineRoute
+  AuthChartsIndexRoute: typeof AuthChartsIndexRoute
+}
+
+const AuthChartsRouteChildren: AuthChartsRouteChildren = {
+  AuthChartsBarRoute: AuthChartsBarRoute,
+  AuthChartsLineRoute: AuthChartsLineRoute,
+  AuthChartsIndexRoute: AuthChartsIndexRoute,
+}
+
+const AuthChartsRouteWithChildren = AuthChartsRoute._addFileChildren(
+  AuthChartsRouteChildren,
+)
 
 interface AuthUsersRouteChildren {
   AuthUsersUserIdRoute: typeof AuthUsersUserIdRoute
@@ -123,11 +235,15 @@ const AuthUsersRouteWithChildren = AuthUsersRoute._addFileChildren(
 )
 
 interface AuthRouteChildren {
+  AuthCalendarRoute: typeof AuthCalendarRouteWithChildren
+  AuthChartsRoute: typeof AuthChartsRouteWithChildren
   AuthUsersRoute: typeof AuthUsersRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthCalendarRoute: AuthCalendarRouteWithChildren,
+  AuthChartsRoute: AuthChartsRouteWithChildren,
   AuthUsersRoute: AuthUsersRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
 }
@@ -136,27 +252,43 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
+  '/calendar': typeof AuthCalendarRouteWithChildren
+  '/charts': typeof AuthChartsRouteWithChildren
   '/users': typeof AuthUsersRouteWithChildren
   '/': typeof AuthIndexRoute
+  '/charts/bar': typeof AuthChartsBarRoute
+  '/charts/line': typeof AuthChartsLineRoute
   '/users/$userId': typeof AuthUsersUserIdRoute
   '/users/create': typeof AuthUsersCreateRoute
+  '/calendar/': typeof AuthCalendarIndexRoute
+  '/charts/': typeof AuthChartsIndexRoute
   '/users/': typeof AuthUsersIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof AuthIndexRoute
+  '/charts/bar': typeof AuthChartsBarRoute
+  '/charts/line': typeof AuthChartsLineRoute
   '/users/$userId': typeof AuthUsersUserIdRoute
   '/users/create': typeof AuthUsersCreateRoute
+  '/calendar': typeof AuthCalendarIndexRoute
+  '/charts': typeof AuthChartsIndexRoute
   '/users': typeof AuthUsersIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/_auth/calendar': typeof AuthCalendarRouteWithChildren
+  '/_auth/charts': typeof AuthChartsRouteWithChildren
   '/_auth/users': typeof AuthUsersRouteWithChildren
   '/_auth/': typeof AuthIndexRoute
+  '/_auth/charts/bar': typeof AuthChartsBarRoute
+  '/_auth/charts/line': typeof AuthChartsLineRoute
   '/_auth/users/$userId': typeof AuthUsersUserIdRoute
   '/_auth/users/create': typeof AuthUsersCreateRoute
+  '/_auth/calendar/': typeof AuthCalendarIndexRoute
+  '/_auth/charts/': typeof AuthChartsIndexRoute
   '/_auth/users/': typeof AuthUsersIndexRoute
 }
 
@@ -164,20 +296,40 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
+    | '/calendar'
+    | '/charts'
     | '/users'
     | '/'
+    | '/charts/bar'
+    | '/charts/line'
     | '/users/$userId'
     | '/users/create'
+    | '/calendar/'
+    | '/charts/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/users/$userId' | '/users/create' | '/users'
+  to:
+    | '/'
+    | '/charts/bar'
+    | '/charts/line'
+    | '/users/$userId'
+    | '/users/create'
+    | '/calendar'
+    | '/charts'
+    | '/users'
   id:
     | '__root__'
     | '/_auth'
+    | '/_auth/calendar'
+    | '/_auth/charts'
     | '/_auth/users'
     | '/_auth/'
+    | '/_auth/charts/bar'
+    | '/_auth/charts/line'
     | '/_auth/users/$userId'
     | '/_auth/users/create'
+    | '/_auth/calendar/'
+    | '/_auth/charts/'
     | '/_auth/users/'
   fileRoutesById: FileRoutesById
 }
@@ -206,8 +358,26 @@ export const routeTree = rootRoute
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
+        "/_auth/calendar",
+        "/_auth/charts",
         "/_auth/users",
         "/_auth/"
+      ]
+    },
+    "/_auth/calendar": {
+      "filePath": "_auth/calendar.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/calendar/"
+      ]
+    },
+    "/_auth/charts": {
+      "filePath": "_auth/charts.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/charts/bar",
+        "/_auth/charts/line",
+        "/_auth/charts/"
       ]
     },
     "/_auth/users": {
@@ -223,6 +393,14 @@ export const routeTree = rootRoute
       "filePath": "_auth/index.tsx",
       "parent": "/_auth"
     },
+    "/_auth/charts/bar": {
+      "filePath": "_auth/charts/bar.tsx",
+      "parent": "/_auth/charts"
+    },
+    "/_auth/charts/line": {
+      "filePath": "_auth/charts/line.tsx",
+      "parent": "/_auth/charts"
+    },
     "/_auth/users/$userId": {
       "filePath": "_auth/users/$userId.tsx",
       "parent": "/_auth/users"
@@ -230,6 +408,14 @@ export const routeTree = rootRoute
     "/_auth/users/create": {
       "filePath": "_auth/users/create.tsx",
       "parent": "/_auth/users"
+    },
+    "/_auth/calendar/": {
+      "filePath": "_auth/calendar/index.tsx",
+      "parent": "/_auth/calendar"
+    },
+    "/_auth/charts/": {
+      "filePath": "_auth/charts/index.tsx",
+      "parent": "/_auth/charts"
     },
     "/_auth/users/": {
       "filePath": "_auth/users/index.tsx",

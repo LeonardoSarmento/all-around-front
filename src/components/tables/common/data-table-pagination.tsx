@@ -38,7 +38,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               </SelectContent>
             </Select>
           </div>
-          <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+          <div className="flex w-[100px] items-center justify-center text-sm font-medium text-nowrap">
             Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
           </div>
           <Separator orientation="vertical" />
