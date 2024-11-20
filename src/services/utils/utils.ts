@@ -1,3 +1,4 @@
+import { Filters } from '@services/types/tables/FilterExtension';
 import { toast } from 'sonner';
 
 export async function sleep(ms: number) {
@@ -69,5 +70,12 @@ export function CopyToClipboardRoute({
       toast.error('Não foi possível copiar o link', { description: error });
     }
   }
+}
+
+export function IsColumnFiltered<T>(filters: Filters<T>) {
+  return (
+    Object.keys(filters).filter((filter) => filter !== 'pageSize' && filter !== 'pageIndex' && filter !== 'selectedId')
+      .length > 0
+  );
 }
 

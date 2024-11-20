@@ -30,7 +30,7 @@ type FormActionButtonGroup = {
 } & React.ButtonHTMLAttributes<HTMLDivElement>;
 
 export function ButtonGroup({ clear, buttons, buttonProps = {}, ...props }: FormActionButtonGroup) {
-  const { navigate } = useRouter();
+  const { history } = useRouter();
 
   return (
     <div className="flex justify-center gap-3" {...props}>
@@ -57,7 +57,7 @@ export function ButtonGroup({ clear, buttons, buttonProps = {}, ...props }: Form
         />
       )}
       {buttons.includes('back') && (
-        <Button onClick={() => navigate({ to: '..' })} variant="outline" type="button" {...buttonProps.back}>
+        <Button onClick={() => history.back()} variant="outline" type="button" {...buttonProps.back}>
           {buttonProps.back?.title ? buttonProps.back.title : 'Voltar'}
         </Button>
       )}

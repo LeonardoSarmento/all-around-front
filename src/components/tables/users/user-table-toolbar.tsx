@@ -7,10 +7,10 @@ import { UserFilters } from '@services/types/tables/User';
 import { UserToolbarAction } from './user-toolbar-actions';
 import { DataTableToolbarProps } from '@services/types/tables/DataTableComponents';
 import { DataTableFacetedFilter } from '../common/data-table-faceted-filter';
+import { IsColumnFiltered } from '@services/utils/utils';
 export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
   const { filters, setFilters } = useFilters('/_auth/users/');
-  const isFiltered =
-    Object.keys(filters).filter((filter) => filter !== 'pageSize' && filter !== 'pageIndex').length > 0;
+  const isFiltered = IsColumnFiltered(filters);
   const fieldMetaId = table.getColumn('id')?.columnDef.meta;
   const fieldMetaName = table.getColumn('name')?.columnDef.meta;
   const fieldMetaEmail = table.getColumn('email')?.columnDef.meta;
@@ -68,7 +68,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             setFilters={setFilters}
           />
         )}
-        {isFiltered && <ResetButton filters={{ pageIndex: filters.pageIndex, pageSize: filters.pageSize }} />}
+        {isFiltered && <ResetButton routeId="/_auth/users/" selectedId={filters.selectedId} />}
       </div>
       <UserToolbarAction />
       <DataTableViewOptions table={table} />

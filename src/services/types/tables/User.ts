@@ -7,6 +7,7 @@ export const UserTable = z.object({
   name: z.string(),
   email: z.string(),
   role: roleSchema.array(),
+  selectedId: z.number().array().optional(),
 });
 
 export type UserTableType = z.infer<typeof UserTable>;

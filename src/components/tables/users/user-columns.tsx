@@ -1,30 +1,24 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { UserButtonAction } from './user-row-actions';
 import { DataTableColumnHeader } from '../common/data-table-column-header';
-import { UserTableType } from '@services/types/tables/User';
+import { UserTable, UserTableType } from '@services/types/tables/User';
 import { roles } from '@services/constants/labels';
 import { GetDataTableColumnHeaderName } from '@services/utils/headerName';
-import { Checkbox } from '@components/ui/checkbox';
+import { SelectAllCheckbox } from '../common/select-all-rows-action';
+import { CheckedRow } from '../common/check-row-action';
+import { ActionHeader } from '../common/data-table-action-header';
 
 export const userColumns: ColumnDef<UserTableType>[] = [
   {
     id: 'select',
     header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
+      <SelectAllCheckbox
+        table={table}
+        routeId="/_auth/users"
+        allIds={table.getRowModel().rows.map((row) => UserTable.parse(row.original).id)}
       />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
-    ),
+    cell: ({ row }) => <CheckedRow row={row} routeId="/_auth/users" id={UserTable.parse(row.original).id} />,
     enableSorting: false,
     enableHiding: false,
   },
@@ -84,6 +78,7 @@ export const userColumns: ColumnDef<UserTableType>[] = [
   },
   {
     id: 'actions',
+    header: () => <ActionHeader title="Ações" />,
     cell: ({ row }) => <UserButtonAction row={row} />,
   },
 ];
