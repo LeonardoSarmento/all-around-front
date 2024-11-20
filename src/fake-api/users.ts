@@ -29,8 +29,8 @@ export async function fetchUsers(filtersAndPagination: TaskFilters): Promise<Pag
   if (sortBy) {
     const [field, order] = sortBy.split('.');
     requestedData.sort((a, b) => {
-      const aValue = a[field as keyof UserTableType];
-      const bValue = b[field as keyof UserTableType];
+      const aValue = a[field as keyof Omit<UserTableType, 'selectedId'>];
+      const bValue = b[field as keyof Omit<UserTableType, 'selectedId'>];
 
       if (aValue === bValue) return 0;
       if (order === 'asc') return aValue > bValue ? 1 : -1;
@@ -40,10 +40,10 @@ export async function fetchUsers(filtersAndPagination: TaskFilters): Promise<Pag
 
   const filteredData = requestedData.filter((user) => {
     return Object.keys(filters).every((key) => {
-      const filter = filters[key as keyof UserTableType];
+      const filter = filters[key as keyof Omit<UserTableType, 'selectedId'>];
       if (filter === undefined || filter === '') return true;
 
-      const value = user[key as keyof UserTableType];
+      const value = user[key as keyof Omit<UserTableType, 'selectedId'>];
 
       if (key === 'role') {
         if (Array.isArray(filter)) {
