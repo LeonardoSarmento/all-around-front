@@ -70,7 +70,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
           />
         )}
         <SelectedIdsFacetedFilter
-          title="Selecão"
+          title="Selecionados"
           filters={filters}
           setFilters={setFilters}
           options={selection}

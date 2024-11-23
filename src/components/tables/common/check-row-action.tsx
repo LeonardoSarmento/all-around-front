@@ -3,6 +3,7 @@ import { Row } from '@tanstack/react-table';
 import { useFilters } from '@services/hooks/useFilters';
 import { useEffect } from 'react';
 import { RegisteredRouter, RouteIds } from '@tanstack/react-router';
+import { Filters } from '@services/types/tables/FilterExtension';
 
 type CheckedAction<T, R> = {
   row: Row<T>;
@@ -15,9 +16,9 @@ export function CheckedRow<T, R extends RouteIds<RegisteredRouter['routeTree']>>
   routeId,
 }: CheckedAction<T, R>) {
   const { filters, setFilters } = useFilters(routeId);
-
+  const { selectedIds } = filters as Filters<T>;
   const handleCheckChange = (value: boolean) => {
-    const selectedIdsSet = new Set((filters as { selectedIds?: number[] }).selectedIds || []);
+    const selectedIdsSet = new Set(selectedIds || []);
 
     if (value) {
       // Add the row's user ID to the set if checked
@@ -39,7 +40,7 @@ export function CheckedRow<T, R extends RouteIds<RegisteredRouter['routeTree']>>
 
   useEffect(() => {
     function ShouldBeChecked() {
-      if (((filters as { selectedIds?: number[] }).selectedIds || []).includes(id)) {
+      if (selectedIds?.includes(id)) {
         row.toggleSelected(true);
       } else {
         row.toggleSelected(false);

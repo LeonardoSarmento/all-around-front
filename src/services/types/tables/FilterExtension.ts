@@ -6,10 +6,13 @@ export type PaginatedData<T> = {
   rowCount: number;
 };
 
+export const selectionSchema = z.enum(['SELECTED', 'NOT_SELECTED']);
+export type SelectionType = z.infer<typeof selectionSchema>;
+
+export const selectedIds = z.number().array().optional();
+export type SelectedIdsType = z.infer<typeof selectedIds>;
+
 export type PaginationParams = PaginationState;
 export type SortParams = { sortBy: `${string}.${'asc' | 'desc'}` };
-export type SelectionParams = { selection: SelectionType[] };
+export type SelectionParams = { selection: SelectionType[]; selectedIds: SelectedIdsType };
 export type Filters<T> = Partial<T & PaginationParams & SortParams & SelectionParams>;
-export const selectionSchema = z.enum(['SELECTED', 'NOT_SELECTED']);
-
-export type SelectionType = z.infer<typeof selectionSchema>;

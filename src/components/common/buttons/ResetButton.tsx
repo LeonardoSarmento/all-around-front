@@ -24,7 +24,7 @@ export default function ResetButton<R extends RouteIds<RegisteredRouter['routeTr
       onClick={() =>
         navigate({
           to: '.',
-          search: { pageIndex, pageSize, selectedIds },
+          search: { pageIndex, pageSize, selectedIds: selectedIds?.length === 0 ? undefined : selectedIds },
         })
       }
       className="h-8 px-2 lg:px-3"
