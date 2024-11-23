@@ -1,13 +1,14 @@
 import { useFilters } from '@services/hooks/useFilters';
 import { DataTableViewOptions } from '@components/tables/common/data-table-view-options';
 import { DebouncedInput } from '@components/tables/common/debouncedInput';
-import { roles } from '@services/constants/labels';
+import { roles, selection } from '@services/constants/labels';
 import ResetButton from '@components/common/buttons/ResetButton';
 import { UserFilters } from '@services/types/tables/User';
 import { UserToolbarAction } from './user-toolbar-actions';
 import { DataTableToolbarProps } from '@services/types/tables/DataTableComponents';
 import { DataTableFacetedFilter } from '../common/data-table-faceted-filter';
 import { IsColumnFiltered } from '@services/utils/utils';
+import { SelectedIdsFacetedFilter } from '../common/selected-faceted-filters';
 export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
   const { filters, setFilters } = useFilters('/_auth/users/');
   const isFiltered = IsColumnFiltered(filters);
@@ -68,7 +69,14 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             setFilters={setFilters}
           />
         )}
-        {isFiltered && <ResetButton routeId="/_auth/users/" selectedId={filters.selectedId} />}
+        <SelectedIdsFacetedFilter
+          title="Selecão"
+          filters={filters}
+          setFilters={setFilters}
+          options={selection}
+          currentSelection={filters.selection}
+        />
+        {isFiltered && <ResetButton routeId="/_auth/users/" selectedIds={filters.selectedIds} />}
       </div>
       <UserToolbarAction />
       <DataTableViewOptions table={table} />

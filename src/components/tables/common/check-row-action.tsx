@@ -17,20 +17,20 @@ export function CheckedRow<T, R extends RouteIds<RegisteredRouter['routeTree']>>
   const { filters, setFilters } = useFilters(routeId);
 
   const handleCheckChange = (value: boolean) => {
-    const selectedIdSet = new Set((filters as { selectedId?: number[] }).selectedId || []);
+    const selectedIdsSet = new Set((filters as { selectedIds?: number[] }).selectedIds || []);
 
     if (value) {
       // Add the row's user ID to the set if checked
-      selectedIdSet.add(id);
+      selectedIdsSet.add(id);
     } else {
       // Remove the row's user ID from the set if unchecked
-      selectedIdSet.delete(id);
+      selectedIdsSet.delete(id);
     }
 
     // Update the filters with the new selected IDs
     setFilters({
       ...filters,
-      selectedId: Array.from(selectedIdSet),
+      selectedIds: Array.from(selectedIdsSet),
     });
 
     // Update the row selection state
@@ -39,7 +39,7 @@ export function CheckedRow<T, R extends RouteIds<RegisteredRouter['routeTree']>>
 
   useEffect(() => {
     function ShouldBeChecked() {
-      if (((filters as { selectedId?: number[] }).selectedId || []).includes(id)) {
+      if (((filters as { selectedIds?: number[] }).selectedIds || []).includes(id)) {
         row.toggleSelected(true);
       } else {
         row.toggleSelected(false);

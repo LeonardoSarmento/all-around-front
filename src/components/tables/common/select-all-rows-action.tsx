@@ -16,13 +16,13 @@ export function SelectAllCheckbox<T, R extends RouteIds<RegisteredRouter['routeT
     if (value) {
       setFilters({
         ...filters,
-        selectedId: allIds,
+        selectedIds: allIds,
       });
       table.toggleAllPageRowsSelected(true);
     } else {
       setFilters({
         ...filters,
-        selectedId: undefined,
+        selectedIds: undefined,
       });
       table.toggleAllPageRowsSelected(false);
     }
