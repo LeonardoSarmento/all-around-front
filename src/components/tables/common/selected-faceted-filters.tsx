@@ -15,50 +15,32 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { Filters } from '@services/types/tables/FilterExtension';
+import { SelectionType } from '@services/types/tables/FilterExtension';
 
 type SelectedIdsFacetedFilterProps<T> = {
   title: string;
   filters: Filters<T>;
   setFilters: (filters: Filters<T>) => Promise<void>;
-  options: { value: string; label: string }[];
-  currentSelection?: string[];
+  options: { value: SelectionType; label: string }[];
 };
 
-export function SelectedIdsFacetedFilter<T>({
-  title,
-  filters,
-  setFilters,
-  options,
-  currentSelection = [],
-}: SelectedIdsFacetedFilterProps<T>) {
-  const [selectedValues, setSelectedValues] = React.useState(new Set(currentSelection));
+export function SelectedIdsFacetedFilter<T>({ title, filters, setFilters, options }: SelectedIdsFacetedFilterProps<T>) {
+  const selectedValues = React.useMemo(() => new Set(filters.selection || []), [filters.selection]);
 
-  // Sync state with external `currentSelection` prop
-  React.useEffect(() => {
-    setSelectedValues(new Set(currentSelection));
-  }, [currentSelection]);
+  const handleSelect = (value: SelectionType) => {
+    const newSelectedValues = new Set(selectedValues);
+    if (newSelectedValues.has(value)) {
+      newSelectedValues.delete(value);
+    } else {
+      newSelectedValues.add(value);
+    }
 
-  // Handle selection toggle
-  const handleSelect = (value: string) => {
-    setSelectedValues((prev) => {
-      const newSelectedValues = new Set(prev);
-      if (newSelectedValues.has(value)) {
-        newSelectedValues.delete(value);
-      } else {
-        newSelectedValues.add(value);
-      }
-      const filterValues = Array.from(newSelectedValues);
-
-      // Only pass selection if it's not empty, otherwise pass undefined
-      setFilters({ ...filters, selection: filterValues });
-      return newSelectedValues;
-    });
+    const updatedSelection = Array.from(newSelectedValues) as Filters<T>['selection'];
+    setFilters({ ...filters, selection: updatedSelection });
   };
 
-  // Handle clear filter
   const handleClearFilters = () => {
-    setSelectedValues(new Set());
-    setFilters({ ...filters, selection: undefined }); // Explicitly passing `undefined`
+    setFilters({ ...filters, selection: undefined });
   };
 
   return (
@@ -67,7 +49,7 @@ export function SelectedIdsFacetedFilter<T>({
         <Button variant="outline" size="sm" className="h-8 border-dashed">
           <PlusCircledIcon className="mr-2 h-4 w-4" />
           {title}
-          {selectedValues?.size > 0 && (
+          {selectedValues.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
               <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">

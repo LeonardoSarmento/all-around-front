@@ -52,7 +52,7 @@ export function DataTableFacetedFilter<TData, TValue, T>({
 
   React.useEffect(() => {
     setSelectedValues(new Set(filterValues));
-  }, [filters, column?.id]);
+  }, [filters]);
 
   const handleSelect = (value: string) => {
     setSelectedValues((prev) => {

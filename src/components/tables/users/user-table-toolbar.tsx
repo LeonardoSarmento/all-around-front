@@ -9,15 +9,20 @@ import { DataTableToolbarProps } from '@services/types/tables/DataTableComponent
 import { DataTableFacetedFilter } from '../common/data-table-faceted-filter';
 import { IsColumnFiltered } from '@services/utils/utils';
 import { SelectedIdsFacetedFilter } from '../common/selected-faceted-filters';
+import { RegisteredRouter, RouteIds } from '@tanstack/react-router';
 export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
-  const { filters, setFilters } = useFilters('/_auth/users/');
+  const userTableRouteId: RouteIds<RegisteredRouter['routeTree']> = '/_auth/users/';
+
+  const { filters, setFilters } = useFilters(userTableRouteId);
   const isFiltered = IsColumnFiltered(filters);
   const fieldMetaId = table.getColumn('id')?.columnDef.meta;
   const fieldMetaName = table.getColumn('name')?.columnDef.meta;
   const fieldMetaEmail = table.getColumn('email')?.columnDef.meta;
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
+        <SelectedIdsFacetedFilter title="Selecionados" filters={filters} setFilters={setFilters} options={selection} />
         {table.getColumn('id')?.getCanFilter() && fieldMetaId?.filterKey !== undefined ? (
           <DebouncedInput
             className="h-8 w-[150px] rounded border shadow lg:w-[150px]"
@@ -69,14 +74,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             setFilters={setFilters}
           />
         )}
-        <SelectedIdsFacetedFilter
-          title="Selecionados"
-          filters={filters}
-          setFilters={setFilters}
-          options={selection}
-          currentSelection={filters.selection}
-        />
-        {isFiltered && <ResetButton routeId="/_auth/users/" selectedIds={filters.selectedIds} />}
+        {isFiltered && <ResetButton routeId={userTableRouteId} selectedIds={filters.selectedIds} />}
       </div>
       <UserToolbarAction />
       <DataTableViewOptions table={table} />

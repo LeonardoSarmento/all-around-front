@@ -7,6 +7,9 @@ import { GetDataTableColumnHeaderName } from '@services/utils/headerName';
 import { SelectAllCheckbox } from '../common/select-all-rows-action';
 import { CheckedRow } from '../common/check-row-action';
 import { ActionHeader } from '../common/data-table-action-header';
+import { RegisteredRouter, RouteIds } from '@tanstack/react-router';
+
+const userTableRouteId: RouteIds<RegisteredRouter['routeTree']> = '/_auth/users/';
 
 export const userColumns: ColumnDef<UserTableType>[] = [
   {
@@ -14,11 +17,11 @@ export const userColumns: ColumnDef<UserTableType>[] = [
     header: ({ table }) => (
       <SelectAllCheckbox
         table={table}
-        routeId="/_auth/users"
+        routeId={userTableRouteId}
         allIds={table.getRowModel().rows.map((row) => UserTable.parse(row.original).id)}
       />
     ),
-    cell: ({ row }) => <CheckedRow row={row} routeId="/_auth/users" id={UserTable.parse(row.original).id} />,
+    cell: ({ row }) => <CheckedRow row={row} routeId={userTableRouteId} id={UserTable.parse(row.original).id} />,
     enableSorting: false,
     enableHiding: false,
   },
