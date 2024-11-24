@@ -241,7 +241,13 @@ function DynamicComponent<TFieldValues extends FieldValues>({
                   <CommandEmpty>Opção não encontrada</CommandEmpty>
                   <CommandGroup>
                     {props.comboboxOptions.map((item) => (
-                      <CommandItem value={item.value} key={item.value} onSelect={props.field.onChange}>
+                      <CommandItem
+                        key={item.value}
+                        value={item.label}
+                        onSelect={() => {
+                          props.field.onChange(item.value);
+                        }}
+                      >
                         {item.label}
                         <Check
                           className={cn('ml-auto', item.value === props.field.value ? 'opacity-100' : 'opacity-0')}

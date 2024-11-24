@@ -74,7 +74,7 @@ export function CopyToClipboardRoute({
 
 export function IsColumnFiltered<T>(filters: Filters<T>) {
   return (
-    Object.keys(filters).filter((filter) => filter !== 'pageSize' && filter !== 'pageIndex' && filter !== 'selectedId')
+    Object.keys(filters).filter((filter) => filter !== 'pageSize' && filter !== 'pageIndex' && filter !== 'selectedIds')
       .length > 0
   );
 }
