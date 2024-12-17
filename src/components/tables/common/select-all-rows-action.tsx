@@ -9,14 +9,18 @@ type SelectAllAction<T, R> = {
   allIds: number[];
 };
 
-export function SelectAllCheckbox<T, R extends RouteIds<RegisteredRouter['routeTree']>>({ table, allIds, routeId }: SelectAllAction<T, R>) {
+export function SelectAllCheckbox<T, R extends RouteIds<RegisteredRouter['routeTree']>>({
+  table,
+  allIds,
+  routeId,
+}: SelectAllAction<T, R>) {
   const { filters, setFilters } = useFilters(routeId);
 
   const handleSelectAllChange = (value: boolean) => {
     if (value) {
       setFilters({
         ...filters,
-        selectedIds: allIds,
+        selectedIds: allIds.length > 0 ? allIds : undefined,
       });
       table.toggleAllPageRowsSelected(true);
     } else {

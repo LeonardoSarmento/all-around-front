@@ -92,9 +92,9 @@ export function DataTableFacetedFilter<TData, TValue, T>({
                   </Badge>
                 ) : (
                   options
-                    .filter((option) => selectedValues.has(option.value))
+                    .filter((option) => selectedValues.has(option.id))
                     .map((option) => (
-                      <Badge variant="secondary" key={option.value} className="rounded-sm px-1 font-normal">
+                      <Badge variant="secondary" key={option.id} className="rounded-sm px-1 font-normal">
                         {option.label}
                       </Badge>
                     ))
@@ -111,9 +111,9 @@ export function DataTableFacetedFilter<TData, TValue, T>({
             <CommandEmpty>Opção não encontrada.</CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
-                const isSelected = selectedValues.has(option.value);
+                const isSelected = selectedValues.has(option.id);
                 return (
-                  <CommandItem key={option.value} onSelect={() => handleSelect(option.value)}>
+                  <CommandItem key={option.id} onSelect={() => handleSelect(option.id)}>
                     <div
                       className={cn(
                         'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
@@ -125,7 +125,7 @@ export function DataTableFacetedFilter<TData, TValue, T>({
                     {option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
                     <span>{option.label}</span>
                     <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
-                      {customFacets.get(option.value)}
+                      {customFacets.get(option.id)}
                     </span>
                   </CommandItem>
                 );

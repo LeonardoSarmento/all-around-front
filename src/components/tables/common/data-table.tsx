@@ -20,7 +20,7 @@ import { useState } from 'react';
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbarProps } from '@services/types/tables/DataTableComponents';
 
-type Props<T extends Record<string, string | number | string[] | number[]>> = {
+type Props<T extends Record<string, string | number | string[] | number[] | Date>> = {
   data: T[];
   columns: ColumnDef<T>[];
   pagination: PaginationState;
@@ -30,7 +30,7 @@ type Props<T extends Record<string, string | number | string[] | number[]>> = {
   toolbar?: ({ table }: DataTableToolbarProps<T>) => React.JSX.Element;
 };
 
-export default function DataTable<T extends Record<string, string | number | string[] | number[]>>({
+export default function DataTable<T extends Record<string, string | number | string[] | number[] | Date>>({
   data,
   columns,
   pagination,

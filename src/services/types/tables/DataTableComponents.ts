@@ -16,7 +16,7 @@ export interface DataTableFacetedFilterProps<TData, TValue, T> {
   title?: string;
   options: {
     label: string;
-    value: string;
+    id: string;
     icon?: React.ComponentType<{ className?: string }>;
   }[];
   filters: Filters<T>;

@@ -1,12 +1,17 @@
+import React from 'react';
 import { Button, ButtonProps } from '@components/ui/button';
-import { useAuth } from '@services/hooks/auth';
-import { roleSchema } from '@services/types/Role';
-type RoleButton = ButtonProps;
+import { RoleGuard } from '@services/hooks/useRoleGuard';
 
-export function RoleButton({ children, ...props }: RoleButton) {
-  const user = useAuth();
-  const allowedRoles: string[] = [roleSchema.enum.ADMIN];
-  allowedRoles.some((role) => role === user.roleCode);
+type RoleButtonProps = ButtonProps;
 
-  return allowedRoles.some((role) => role === user.roleCode) ? <Button {...props}>{children}</Button> : null;
-}
+export const RoleButton = React.forwardRef<HTMLButtonElement, RoleButtonProps>(({ children, ...props }, ref) => {
+  return (
+    <RoleGuard>
+      <Button {...props} ref={ref}>
+        {children}
+      </Button>
+    </RoleGuard>
+  );
+});
+
+RoleButton.displayName = 'RoleButton';
