@@ -111,7 +111,7 @@ function DeleteEvent() {
             This action cannot be undone. This will cancel your event and remove it from the calendar.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className='gap-3'>
+        <DialogFooter className="gap-3">
           <DialogClose>Cancel</DialogClose>
           <Button variant="destructive" type="button">
             <Icons.danger />

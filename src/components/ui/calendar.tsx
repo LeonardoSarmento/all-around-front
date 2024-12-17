@@ -33,7 +33,7 @@ function Calendar({
   customLocale = DateLocaleSchema.Enum['pt-BR'],
   customMode = 'single',
   ...props
-}: CalendarProps & { customLocale: DateLocaleType; customMode: ModeSchemaType }) {
+}: CalendarProps & { customLocale?: DateLocaleType; customMode?: ModeSchemaType }) {
   const [navView, setNavView] = React.useState<'days' | 'years'>('days');
   const [displayYears, setDisplayYears] = React.useState<{
     from: number;
