@@ -23,7 +23,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        <SelectedIdsFacetedFilter title="Selecionados" routeId={userTableRouteId}  />
+        <SelectedIdsFacetedFilter title="Selecionados" routeId={userTableRouteId} />
         {table.getColumn('id')?.getCanFilter() && fieldMetaId?.filterKey !== undefined ? (
           <DebouncedInput
             className="h-8 w-[150px] rounded border shadow lg:w-[150px]"
@@ -71,8 +71,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
             column={table.getColumn('role')}
             title="Perfil"
             options={roles}
-            filters={filters}
-            setFilters={setFilters}
+            routeId={userTableRouteId}
           />
         )}
         <DatePickerWithRange routeId={userTableRouteId} />
