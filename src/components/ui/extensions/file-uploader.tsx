@@ -277,7 +277,7 @@ export const FileUploaderItem = forwardRef<HTMLDivElement, { index: number } & R
 
 FileUploaderItem.displayName = 'FileUploaderItem';
 
-export const FileInput = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+export const FileInput = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement> & { disabled?: boolean }>(
   ({ className, children, ...props }, ref) => {
     const { dropzoneState, isFileTooBig, isLOF } = useFileUpload();
     const rootProps = isLOF ? {} : dropzoneState.getRootProps();

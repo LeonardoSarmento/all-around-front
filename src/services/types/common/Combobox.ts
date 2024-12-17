@@ -5,5 +5,7 @@ export const ComboboxSchema = z.string({
 });
 export type ComboboxType = z.infer<typeof ComboboxSchema>;
 
-export const ComboboxOptionsSchema = z.object({ value: z.string(), label: z.string() }).array();
+export const ComboboxOptionsSchema = z
+  .object({ id: z.string(), label: z.string(), disabled: z.boolean().optional() })
+  .array();
 export type ComboboxOptionsType = z.infer<typeof ComboboxOptionsSchema>;

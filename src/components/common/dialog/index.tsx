@@ -23,7 +23,7 @@ export function DialogComponent({ title, buttonText, mutate, buttonType = 'butto
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <RoleButton variant={buttonType === 'rowAction' ? 'outline' : 'destructive'} {...props}>
+        <RoleButton  {...props} variant={buttonType === 'rowAction' ? 'outline' : 'destructive'}>
           {buttonType === 'rowAction' ? <DeleteIcon /> : buttonText ? buttonText : 'Deletar'}
         </RoleButton>
       </DialogTrigger>
@@ -40,9 +40,11 @@ export function DialogComponent({ title, buttonText, mutate, buttonType = 'butto
               Cancelar
             </Button>
           </DialogClose>
-          <RoleButton type="button" onClick={mutate} variant="destructive">
-            Deletar
-          </RoleButton>
+          <DialogClose asChild>
+            <RoleButton type="button" onClick={mutate} variant="destructive">
+              Deletar
+            </RoleButton>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

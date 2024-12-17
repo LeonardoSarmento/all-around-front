@@ -1,4 +1,6 @@
+import { DateLocaleType } from '@services/types/common/Date';
 import { Filters } from '@services/types/tables/FilterExtension';
+import { intlFormat } from 'date-fns';
 import { toast } from 'sonner';
 
 export async function sleep(ms: number) {
@@ -79,3 +81,22 @@ export function IsColumnFiltered<T>(filters: Filters<T>) {
   );
 }
 
+export function dateFormatter({
+  date,
+  customLocale = 'pt-BR',
+}: {
+  date: string | number | Date;
+  customLocale?: DateLocaleType;
+}) {
+  return intlFormat(
+    date,
+    {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    },
+    {
+      locale: customLocale,
+    },
+  );
+}
