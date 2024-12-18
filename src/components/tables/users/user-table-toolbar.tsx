@@ -11,6 +11,7 @@ import { IsColumnFiltered } from '@services/utils/utils';
 import { SelectedIdsFacetedFilter } from '../common/selected-faceted-filters';
 import { RegisteredRouter, RouteIds } from '@tanstack/react-router';
 import { DatePickerWithRange } from '../common/data-table-date-selection';
+import { DataTableExportToCSV } from '../common/data-table-export-to-csv';
 export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>) {
   const userTableRouteId: RouteIds<RegisteredRouter['routeTree']> = '/_auth/users/';
 
@@ -78,6 +79,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
         {isFiltered && <ResetButton routeId={userTableRouteId} />}
       </div>
       <UserToolbarAction />
+      <DataTableExportToCSV table={table} routeId={userTableRouteId} filename="users" />
       <DataTableViewOptions table={table} />
     </div>
   );

@@ -1,4 +1,4 @@
-import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "@services/constants/tables";
+import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "@components/tables/common/data-table";
 
 // Função para remover parâmetros vazios ou padrão
 export const cleanEmptyParams = <T extends Record<string, unknown>>(search: T): Partial<T> => {

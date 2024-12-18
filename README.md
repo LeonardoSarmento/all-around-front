@@ -1,6 +1,8 @@
 # Template for front-end applications
 All around template for front-end applications
 
+Visit the site at [template](https://template.leosarmento.com)
+
 ### Features
 - Sidebar menu
 - DataTable

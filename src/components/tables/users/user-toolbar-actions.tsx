@@ -8,10 +8,10 @@ export function UserToolbarAction({ className, ...props }: DataTableToolbarActio
   const router = useRouter();
   return (
     <div className={cn('mx-2 flex justify-center gap-3', className)} {...props}>
-      <RoleButton onClick={() => router.navigate({ to: '/users/create' })} variant="default">
+      <RoleButton onClick={() => router.navigate({ to: '/users/create' })} size="sm" variant="default">
         Criar
       </RoleButton>
-      <DialogComponent title="Deseja remover os registros de usuários?" />
+      <DialogComponent size="sm" title="Deseja remover os registros de usuários?" />
       <Button
         onClick={() =>
           router.navigate({
@@ -19,6 +19,7 @@ export function UserToolbarAction({ className, ...props }: DataTableToolbarActio
           })
         }
         variant="outline"
+        size="sm"
       >
         Voltar
       </Button>

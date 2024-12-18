@@ -1,5 +1,5 @@
+import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@components/tables/common/data-table';
 import { faker } from '@faker-js/faker';
-import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from '@services/constants/tables';
 import { roleSchema, RolesType } from '@services/types/Role';
 import { Filters, PaginatedData } from '@services/types/tables/FilterExtension';
 import { UserTableType } from '@services/types/tables/User';
