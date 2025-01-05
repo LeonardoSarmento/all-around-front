@@ -6,8 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { Button } from "@/components/ui/button";
 import { CategoricalChartState } from "recharts/types/chart/types";
-import Socials from "@/components/socials";
-import { siteConfig } from "@/config/site.config";
 
 type DataPoint = {
   date: string;
@@ -300,7 +298,6 @@ export function CustomChartComponent(): JSX.Element {
           >
             Reset
           </Button>
-          <Socials />
         </div>
       </CardHeader>
       <CardContent className="w-full h-[450px] my-4">
@@ -318,16 +315,6 @@ export function CustomChartComponent(): JSX.Element {
             {memoizedChart}
           </div>
         </ChartContainer>
-        <p className="text-xs text-muted-foreground text-center mt-2">
-          made by{" "}
-          <a
-            href={siteConfig.links.x}
-            target="_blank"
-            className="underline text-blue-400"
-          >
-            @rds_agi
-          </a>
-        </p>
       </CardContent>
     </Card>
   );
