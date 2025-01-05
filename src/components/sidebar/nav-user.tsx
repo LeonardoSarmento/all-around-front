@@ -2,7 +2,6 @@
 
 import { BadgeCheck, Bell, LogOut, MonitorCog, Moon, Sun } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +20,7 @@ import { CaretSortIcon, ComponentPlaceholderIcon } from '@radix-ui/react-icons';
 import { SidebarMenuOptions } from './app-sidebar';
 import { useTheme } from '@components/providers/theme/Theme-provider';
 import { useMutateLogout } from '@services/query/auth/useMutateLogout';
+import { Icons } from '@components/icons/icon';
 
 export function NavUser({ user }: { user: SidebarMenuOptions['user'] }) {
   const { isMobile } = useSidebar();
@@ -36,10 +36,9 @@ export function NavUser({ user }: { user: SidebarMenuOptions['user'] }) {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <Icons.logo className="size-4" />
+              </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
@@ -55,10 +54,9 @@ export function NavUser({ user }: { user: SidebarMenuOptions['user'] }) {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <Icons.logo className="size-4" />
+                </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>

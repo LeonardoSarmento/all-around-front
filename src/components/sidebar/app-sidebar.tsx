@@ -45,8 +45,8 @@ export type SidebarMenuOptions = {
 const data: SidebarMenuOptions = {
   user: {
     name: 'Leonardo',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
+    email: 'leonardo.a.sarmento@gmail.com',
+    avatar: '/thumbs-up.svg',
   },
   navMain: [
     {
@@ -122,12 +122,37 @@ const data: SidebarMenuOptions = {
       url: 'https://instagram.com/leonardo.a.sarmento',
       icon: Icons.instagram,
     },
+    {
+      title: 'Email',
+      url: 'mailto: leonardo.a.sarmento@gmail.com?subject=ThisIsMyFeedback&body=Hello!',
+      icon: Icons.email,
+    },
   ],
   projects: [
     {
       title: 'Portfolio',
       url: 'https://leosarmento.com/',
       icon: Icons.contactRound,
+    },
+    {
+      title: 'Template',
+      url: 'https://template.leosarmento.com/',
+      icon: Icons.template,
+    },
+    {
+      title: 'Games',
+      url: 'https://games.leosarmento.com/',
+      icon: Icons.startGame,
+    },
+    {
+      title: 'DynamicForm',
+      url: 'https://dynamicform.leosarmento.com/',
+      icon: Icons.form,
+    },
+    {
+      title: 'Data Table',
+      url: 'https://datatable.leosarmento.com/',
+      icon: Icons.datatable,
     },
     {
       title: 'Router',
