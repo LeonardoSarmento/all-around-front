@@ -82,11 +82,11 @@ export default function DynamicForm<TFieldValues extends FieldValues>({
       control={props.control}
       name={props.name}
       render={({ field }) => (
-        <FormItem className={cn('flex flex-col space-y-0.5', props.className)}>
-          {props.hideLabel ? null : <FormLabel className="mb-1">{props.label}</FormLabel>}
+        <FormItem className={cn('flex flex-col space-y-0.5', props.classnameitem)}>
+          {props.hidelabel ? null : <FormLabel className="mb-1">{props.label}</FormLabel>}
           {DynamicComponent({ field, hint, ...props })}
-          {props.hideDescription ? null : <FormDescription>{props.description}</FormDescription>}
-          {props.hideErrorMessage ? null : <FormMessage className={props.classNameMessage} />}
+          {props.hidedescription ? null : <FormDescription>{props.description}</FormDescription>}
+          {props.hideerrormessage ? null : <FormMessage className={props.classnamemessage} />}
         </FormItem>
       )}
     />
@@ -114,7 +114,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
             day: 'numeric',
           },
       {
-        locale: props.type === 'date' ? props.locale || 'pt-BR' : 'pt-BR',
+        locale: props.type === 'date' ? props.customLocale || 'pt-BR' : 'pt-BR',
       },
     );
   }
@@ -192,69 +192,69 @@ function DynamicComponent<TFieldValues extends FieldValues>({
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
+                {...props}
                 autoFocus
                 customMode={props.mode || 'single'}
-                customLocale={props.locale || 'pt-BR'}
+                customLocale={props.customLocale || 'pt-BR'}
                 selected={props.field.value}
                 numberOfMonths={props.mode === 'range' ? 2 : 1}
-                disabled={{ after: new Date() }}
+                disabled={{
+                  after: new Date(),
+                  ...(typeof props.disabled === 'object' && props.disabled ? props.disabled : {}),
+                }}
                 onSelect={props.field.onChange}
               />
             </PopoverContent>
           </Popover>
         </>
       );
-    case 'select':
+    case 'switch': {
+      const { type, ...switchRest } = props;
+      console.log(type);
+      return (
+        <>
+          <FormControl>
+            <Switch {...switchRest} checked={props.field.value} onCheckedChange={props.field.onChange} aria-readonly />
+          </FormControl>
+        </>
+      );
+    }
+    case 'select': {
+      const { type, ...selectRest } = props;
+      console.log(type);
       return (
         <>
           <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
             <FormControl>
-              <SelectTrigger>
-                <SelectValue
-                  placeholder={props.placeholder ?? 'Selecione uma das opções'}
-                  className={props.className}
-                />
+              <SelectTrigger {...selectRest}>
+                <SelectValue placeholder={props.placeholder ?? 'Selecione uma das opções'} />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {props.selectOptions?.map((item) => (
-                <SelectItem key={item} value={item}>
-                  {item}
+              {props.selectoptions?.map((item) => (
+                <SelectItem key={item.id} value={item.id} disabled={item.disabled}>
+                  {item.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </>
       );
-    case 'switch':
-      return (
-        <>
-          <FormControl>
-            <Switch
-              checked={props.field.value}
-              onCheckedChange={props.field.onChange}
-              disabled={props.disabled}
-              aria-readonly
-              className={props.className}
-            />
-          </FormControl>
-        </>
-      );
-    case 'multi-select':
+    }
+    case 'multi-select': {
+      const { type, ...multiSelectRest } = props;
+      console.log(type);
       return (
         <>
           <MultiSelector onValuesChange={props.field.onChange} values={props.field.value}>
             <MultiSelectorTrigger>
-              <MultiSelectorInput
-                placeholder={props.placeholder ?? 'Selecione suas opções'}
-                className={props.className}
-              />
+              <MultiSelectorInput {...multiSelectRest} placeholder={props.placeholder ?? 'Selecione suas opções'} />
             </MultiSelectorTrigger>
             <MultiSelectorContent>
               <MultiSelectorList>
-                {props.multiSelectOptions?.map((item) => (
-                  <MultiSelectorItem key={item.id} value={item.name}>
-                    <span>{item.name}</span>
+                {props.multiselectoptions?.map((item) => (
+                  <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
+                    <span>{item.label}</span>
                   </MultiSelectorItem>
                 ))}
               </MultiSelectorList>
@@ -262,10 +262,13 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </MultiSelector>
         </>
       );
-    case 'checkbox':
+    }
+    case 'checkbox': {
+      const { type, ...checkboxRest } = props;
+      console.log(type);
       return (
         <>
-          {props.checkboxOptions?.map((item) => (
+          {props.checkboxoptions?.map((item) => (
             <FormField
               key={item.id}
               control={props.control}
@@ -275,8 +278,8 @@ function DynamicComponent<TFieldValues extends FieldValues>({
                   <FormItem key={item.id} className="flex flex-row items-center space-x-3 space-y-0">
                     <FormControl>
                       <Checkbox
-                        className={props.className}
-                        disabled={item.disabled}
+                        {...checkboxRest}
+                        disabled={props.disabled ? true : item.disabled}
                         checked={field.value?.includes(item.id)}
                         onCheckedChange={(checked) => {
                           return checked
@@ -295,61 +298,69 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           ))}
         </>
       );
+    }
     case 'radio':
       return (
         <>
           <FormControl>
             <RadioGroup
+              {...props}
               onValueChange={props.field.onChange}
               defaultValue={props.field.value}
               className={cn('flex flex-col space-y-1', props.className)}
             >
-              {props.radioOptions.map((item) => (
+              {props.radiooptions.map((item) => (
                 <FormItem key={item.id} className="flex items-center space-x-3 space-y-0">
                   <FormControl>
                     <RadioGroupItem value={item.id} disabled={item.disabled} />
                   </FormControl>
-                  <FormLabel className="font-normal">{item.label}</FormLabel>
+                  <FormLabel className={`${item.disabled ? 'text-muted-foreground' : 'text-primary'} font-normal`}>
+                    {item.label}
+                  </FormLabel>
                 </FormItem>
               ))}
             </RadioGroup>
           </FormControl>
         </>
       );
-    case 'combobox':
+    case 'combobox': {
+      const { type, handlecustomselect, ...comboboxRest } = props;
+      console.log(type);
       return (
         <>
           <Popover>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
+                  {...comboboxRest}
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    `h-9 w-[200px] justify-between text-sm ${!props.field.value && 'font-normal text-muted-foreground'}`,
+                    `h-9 justify-between text-sm ${!props.field.value && 'font-normal text-muted-foreground'}`,
                     props.className,
                   )}
                 >
                   {props.field.value
-                    ? props.comboboxOptions.find((item) => item.id === props.field.value)?.label
+                    ? props.comboboxoptions.find((item) => item.id === props.field.value)?.label
                     : (props.placeholder ?? 'Selecione uma opção')}
                   <ChevronsUpDown className="opacity-50" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="p-0">
               <Command>
                 <CommandInput placeholder="Procure aqui" className="h-9" />
                 <CommandList>
-                  <CommandEmpty>Opção não encontrada</CommandEmpty>
+                  <CommandEmpty>{props.optionsnotfoundtext ?? 'Opção não encontrada'}</CommandEmpty>
                   <CommandGroup>
-                    {props.comboboxOptions.map((item) => (
+                    {props.comboboxoptions.map((item) => (
                       <CommandItem
                         key={item.id}
                         value={item.label}
                         disabled={item.disabled}
+                        className={props.classNameCommandItem}
                         onSelect={(value) => {
-                          props.onCustomSelect?.(value);
+                          handlecustomselect?.(value);
                           props.field.onChange(item.id);
                         }}
                       >
@@ -364,17 +375,21 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </Popover>
         </>
       );
+    }
     case 'file-upload':
       return (
         <>
           <FileUploader
             value={props.field.value}
             onValueChange={props.field.onChange}
-            dropzoneOptions={dropzone}
+            dropzoneOptions={{ ...dropzone, ...props.dropzone }}
             reSelect={true}
             className={props.className}
           >
-            <FileInput {...props} className="outline-dashed outline-1 outline-white" disabled={props.disabled}>
+            <FileInput
+              {...props}
+              className={cn('outline-dashed outline-1 outline-white', props.disabled ? 'opacity-40' : 'opacity-100')}
+            >
               <div className="flex w-full flex-col items-center justify-center pb-4 pt-3">
                 <FileSvgDraw />
               </div>
@@ -392,30 +407,30 @@ function DynamicComponent<TFieldValues extends FieldValues>({
           </FileUploader>
         </>
       );
-    default:
+    default: {
+      const { mask, ...inputRest } = props;
       return (
         <>
           <FormControl>
             <Input
-              {...props}
-              {...props.field}
-              className={props.className}
-              placeholder={props.placeholder}
-              maxLength={
-                props.mask === 'phone' || props.mask === 'ip' ? 15 : props.mask === 'macAddress' ? 17 : undefined
-              }
+              {...inputRest}
+              {...inputRest.field}
+              className={inputRest.className}
+              placeholder={inputRest.placeholder}
+              maxLength={mask === 'phone' || mask === 'ip' ? 15 : mask === 'macAddress' ? 17 : undefined}
               onChange={(e) => {
                 const { value } = e.target;
-                if (props.mask) {
-                  e.target.value = applyMaskToInput(props.mask, value);
+                if (mask) {
+                  e.target.value = applyMaskToInput(mask, value);
                 }
-                props.field.onChange(e);
+                inputRest.field.onChange(e);
               }}
               hint={hint}
             />
           </FormControl>
         </>
       );
+    }
   }
 }
 

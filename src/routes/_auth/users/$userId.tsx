@@ -75,7 +75,7 @@ function EditUser() {
                   label="Perfil"
                   name="role"
                   placeholder="Perfil"
-                  comboboxOptions={roles}
+                  comboboxoptions={roles}
                   className="w-[255px]"
                 />
               </div>

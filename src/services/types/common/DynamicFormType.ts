@@ -11,7 +11,7 @@ import { TextareaSchema } from './TextArea';
 import { DateLocaleSchema, DateModeSchema, DateRangeSchema, DateSchema } from './Date';
 import { RadioGroupProps } from '@radix-ui/react-radio-group';
 import { InputProps } from '@components/ui/input';
-import { SelectContentProps } from '@radix-ui/react-select';
+import { SelectTriggerProps } from '@radix-ui/react-select';
 import { CalendarProps } from '@components/ui/calendar';
 import { AutosizeTextAreaProps } from '@components/ui/autosize-textarea';
 import cnpj from '../CNPJ';
@@ -19,72 +19,83 @@ import { PhoneSchema } from './Phone';
 import { MacAddress } from './MacAddress';
 import { IpSchema } from './Ip';
 import { CpfSchema } from './Cpf';
+import { ButtonProps } from '@components/ui/button';
+import { CheckboxProps } from '@radix-ui/react-checkbox';
+import { DropzoneOptions } from 'react-dropzone';
+import * as SwitchPrimitives from '@radix-ui/react-switch';
+import { Command as CommandPrimitive } from 'cmdk';
 
 const DynamicFormSchema = z.object({
   /* Texto que será renderizado antes do usuários preencher o campo ou título do componente. */
 
   /* Se deve esconder a renderização da mensagem de error. */
-  hideErrorMessage: z.boolean().optional(),
+  hideerrormessage: z.boolean().optional(),
 
   /* Se deve esconder a renderização do componente label do hook-form. */
-  hideLabel: z.boolean().optional(),
+  hidelabel: z.boolean().optional(),
 
   /* Se deve esconder a renderização do componente description do hook-form. */
-  hideDescription: z.boolean().optional(),
+  hidedescription: z.boolean().optional(),
 
   description: z.string().optional(),
 
   label: z.string().optional(),
 
-  className: z.string().optional(),
+  classnameitem: z.string().optional(),
 
-  classNameMessage: z.string().optional(),
+  classnamemessage: z.string().optional(),
 });
 
-const baseInputSchema = z.object({
+export const baseInputSchema = z.object({
   type: z.enum(['input', 'password', 'number', 'textarea']),
   placeholder: z.string(),
   mask: z
     .union([
       z.literal('cnpj'),
       z.literal('cpf'),
-      z.literal('phone'),
       z.literal('ip'),
       z.literal('macAddress'),
+      z.literal('phone'),
       z.function().args(z.string()).returns(z.string()),
     ])
     .optional(),
 });
-export type BaseInputT = z.infer<typeof baseInputSchema>;
-const ComboboxInputSchema = z.object({
+
+export const ComboboxInputSchema = z.object({
   /* Array de opções para o component de combobox. */
   type: z.literal('combobox'),
-  comboboxOptions: ComboboxOptionsSchema,
+  comboboxoptions: ComboboxOptionsSchema,
   placeholder: z.string().optional(),
+  optionsnotfoundtext: z.string().optional(),
 });
-const SelectInputSchema = z.object({
+
+export const SelectInputSchema = z.object({
   /* Array de opções para o component de select. */
   type: z.literal('select'),
-  selectOptions: SelectOptionsSchema,
+  selectoptions: SelectOptionsSchema,
   placeholder: z.string().optional(),
 });
-const MultiSelectInputSchema = z.object({
+
+export const MultiSelectInputSchema = z.object({
   type: z.literal('multi-select'),
   /* Array de opções para o component de multi-select. */
-  multiSelectOptions: MultiSelectOptionsSchema,
+  multiselectoptions: MultiSelectOptionsSchema,
   placeholder: z.string().optional(),
 });
-const CheckboxInputSchema = z.object({
+
+export const CheckboxInputSchema = z.object({
   /* Array de opções para o component de checkbox. */
   type: z.literal('checkbox'),
-  checkboxOptions: CheckboxOptionsSchema,
+  checkboxoptions: CheckboxOptionsSchema,
 });
-const SwitchInputSchema = z.object({
+
+export const SwitchInputSchema = z.object({
   /* Array de opções para o component de switch. */
   type: z.literal('switch'),
   disabled: z.boolean().optional(),
 });
-const FileUploadInputSchema = z.object({
+
+export const FileUploadInputSchema = z.object({
   /* Array de opções para o component de file upload. */
   type: z.literal('file-upload'),
   disabled: z.boolean().optional(),
@@ -94,17 +105,18 @@ export const DateInputSchema = z.object({
   /* Array de opções para o component de date. */
   type: z.literal('date'),
   placeholder: z.string().optional(),
-  locale: DateLocaleSchema.optional(),
+  customLocale: DateLocaleSchema.optional(),
   mode: DateModeSchema,
   format: z.enum(['long', 'short']).default('long').optional(),
 });
-const RadioInputSchema = z.object({
+
+export const RadioInputSchema = z.object({
   /* Array de opções para o component de radio. */
   type: z.literal('radio'),
-  radioOptions: RadioOptionsSchema,
+  radiooptions: RadioOptionsSchema,
 });
 
-export const parameterTypeSchema = z
+export const DynamicFormTypeSchema = z
   .discriminatedUnion('type', [
     baseInputSchema,
     ComboboxInputSchema,
@@ -118,7 +130,7 @@ export const parameterTypeSchema = z
   ])
   .and(DynamicFormSchema);
 
-export type DynamicFormType<TFieldValues extends FieldValues> = z.infer<typeof parameterTypeSchema> & {
+export type DynamicFormType<TFieldValues extends FieldValues> = z.infer<typeof DynamicFormTypeSchema> & {
   /* Propriedade control do hook useForm do react-hook-form. */
   control: Control<TFieldValues>;
 
@@ -126,20 +138,9 @@ export type DynamicFormType<TFieldValues extends FieldValues> = z.infer<typeof p
   name: Path<TFieldValues>;
 
   className?: string;
-} & (
-    | PasswordT
-    | NumberT
-    | TextAreaT
-    | DateT
-    | SelectT
-    | SwitchT
-    | MultiSelectT
-    | CheckboxT
-    | RadioT
-    | ComboboxItemT
-    | FileUploadT
-    | InputT
-  );
+} & ExtendedFormProps;
+
+export type BaseInputT = z.infer<typeof baseInputSchema>;
 
 type PasswordT = {
   type: 'password';
@@ -159,20 +160,21 @@ type DateT = {
 
 type SelectT = {
   type: 'select';
-} & SelectContentProps &
-  React.RefAttributes<HTMLDivElement>;
+} & Omit<SelectTriggerProps, 'type'> &
+  React.RefAttributes<HTMLButtonElement>;
 
-type SwitchT = {
-  type: 'switch';
-} & React.RefAttributes<HTMLButtonElement>;
-
-type MultiSelectT = {
+type MultiSelectT = Omit<React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>, 'type'> & {
   type: 'multi-select';
-} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+};
+
+type SwitchT = Omit<React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>, 'type'> & {
+  type: 'switch';
+};
 
 type CheckboxT = {
   type: 'checkbox';
-} & React.RefAttributes<HTMLButtonElement>;
+} & Omit<CheckboxProps, 'type'> &
+  React.RefAttributes<HTMLButtonElement>;
 
 type RadioT = {
   type: 'radio';
@@ -181,11 +183,14 @@ type RadioT = {
 
 type ComboboxItemT = {
   type: 'combobox';
-  onCustomSelect?: (value: string) => void;
-} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+  handlecustomselect?: (value: string) => void;
+  classNameCommandItem?: string;
+} & Omit<ButtonProps, 'type'> &
+  React.RefAttributes<HTMLButtonElement>;
 
 type FileUploadT = {
   type: 'file-upload';
+  dropzone?: DropzoneOptions;
 } & React.HTMLAttributes<HTMLDivElement> & {
     disabled?: boolean;
   } & React.RefAttributes<HTMLDivElement>;
@@ -193,6 +198,20 @@ type FileUploadT = {
 type InputT = {
   type: 'input';
 } & InputProps;
+
+export type ExtendedFormProps =
+  | PasswordT
+  | NumberT
+  | TextAreaT
+  | DateT
+  | SelectT
+  | SwitchT
+  | MultiSelectT
+  | CheckboxT
+  | RadioT
+  | ComboboxItemT
+  | FileUploadT
+  | InputT;
 
 export const DynamicSchemaTestingComponent = z.object({
   input: z

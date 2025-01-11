@@ -177,7 +177,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem>
+        <SidebarMenuItem className="space-y-3">
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
@@ -185,9 +185,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Template Project</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  <span className="truncate text-xs">@leosarmento</span>
                 </div>
               </Link>
+            </SidebarMenuButton>
+            <SidebarMenuButton asChild size="sm">
+              <a href="https://github.com/LeonardoSarmento/all-around-front" target="_blank" rel="noopener noreferrer">
+                <Icons.github />
+                <span>Template Github</span>
+              </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
