@@ -13,10 +13,9 @@ export const useMutateLogout = () => {
   return useMutation({
     mutationFn: () => Logout(),
     onSuccess() {
-      auth.logout().then(() => {
-        invalidate().finally(() => {
-          navigate({ to: '/' });
-        });
+      auth.logout();
+      invalidate().finally(() => {
+        navigate({ to: '/' });
       });
     },
     onError(error) {

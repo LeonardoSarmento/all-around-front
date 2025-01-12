@@ -18,12 +18,11 @@ export const useMutateLogin = () => {
   return useMutation({
     mutationFn: (login: LoginType) => LogIn(login),
     onSuccess(_, { email, password }) {
-      auth
-        .login(
-          { email, password },
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJyb2xlQ29kZSI6IkFETUlOIiwiaWF0IjoxNTE2MjM5MDIyfQ.FiDylQP0LigINTI0Va91X76NYE7dNLvf4lk84qiCHPg',
-        )
-        .then(() => invalidate());
+      auth.login(
+        { email, password },
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJyb2xlQ29kZSI6IkFETUlOIiwiaWF0IjoxNTE2MjM5MDIyfQ.FiDylQP0LigINTI0Va91X76NYE7dNLvf4lk84qiCHPg',
+      );
+      invalidate();
     },
     onError(error) {
       if (error instanceof AxiosError && error.code === 'ERR_NETWORK' && error.status === undefined) {
