@@ -10,7 +10,7 @@ import { ActionHeader } from '../common/data-table-action-header';
 import { RegisteredRouter, RouteIds } from '@tanstack/react-router';
 import { dateFormatter } from '@services/utils/utils';
 
-const userTableRouteId: RouteIds<RegisteredRouter['routeTree']> = '/_auth/users/';
+export const userTableRouteId: RouteIds<RegisteredRouter['routeTree']> = '/_auth/users/';
 
 export const userColumns: ColumnDef<UserTableType>[] = [
   {

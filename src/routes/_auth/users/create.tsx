@@ -45,8 +45,8 @@ function CreateUser() {
       <Form {...form}>
         <form onSubmit={onSubmit}>
           <Card>
-            <CardContent className="flex min-h-[450px] flex-col items-center justify-center gap-5 p-4">
-              <div className="flex gap-6">
+            <CardContent className="flex min-h-[450px] flex-col items-center justify-center gap-3 py-2">
+              <div className="flex gap-3 max-lg:flex-col">
                 <DynamicForm
                   control={form.control}
                   type="input"
@@ -64,7 +64,7 @@ function CreateUser() {
                   className="w-[255px]"
                 />
               </div>
-              <div className="flex gap-6">
+              <div className="flex gap-3 max-lg:flex-col">
                 <DynamicForm
                   control={form.control}
                   type="input"

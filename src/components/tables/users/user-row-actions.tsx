@@ -16,6 +16,7 @@ export function UserButtonAction<TData>({ row }: DataTableRowActionsProps<TData>
             params: { userId: `${user.id}` },
           })
         }
+        size="sm"
         variant="outline"
       >
         <EditIcon />

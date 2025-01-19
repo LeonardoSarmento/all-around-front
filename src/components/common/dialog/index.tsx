@@ -26,7 +26,7 @@ export const DialogComponent = React.forwardRef<HTMLButtonElement, DialogType>(
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <RoleButton {...props} ref={ref} variant={buttonType === 'rowAction' ? 'outline' : 'destructive'}>
+          <RoleButton {...props} ref={ref} variant={buttonType === 'rowAction' ? 'outline' : 'destructive'} size="sm">
             {buttonType === 'rowAction' ? <DeleteIcon /> : buttonText ? buttonText : 'Deletar'}
           </RoleButton>
         </DialogTrigger>

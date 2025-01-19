@@ -23,33 +23,22 @@ export function UserAuthForm({ ...props }: UserAuthFormProps) {
   const onSubmit = form.handleSubmit((values) => mutate(values));
 
   return (
-    <>
-      <div className={'grid min-w-[450px] gap-6'} {...props}>
-        <Form {...form}>
-          <form onSubmit={onSubmit}>
-            <div className="grid gap-2">
-              <div className="grid gap-1">
-                <DynamicForm
-                  control={form.control}
-                  name="email"
-                  placeholder="E-mail"
-                  type="input"
-                  description='Apenas escreva um email válido e acesse tudo que temos disponível :)'
-                />
-                <DynamicForm
-                  control={form.control}
-                  name="password"
-                  placeholder="Senha"
-                  type="password"
-                />
-              </div>
-              <Button type="submit">
-                Acessar
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </div>
-    </>
+    <div {...props}>
+      <Form {...form}>
+        <form onSubmit={onSubmit}>
+          <div className="flex min-w-[300px] flex-col gap-y-1 sm:min-w-[350px]">
+            <DynamicForm
+              control={form.control}
+              name="email"
+              placeholder="E-mail"
+              type="input"
+              description="Apenas escreva um email válido e acesse tudo que temos disponível :)"
+            />
+            <DynamicForm control={form.control} name="password" placeholder="Senha" type="password" />
+            <Button type="submit">Acessar</Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }

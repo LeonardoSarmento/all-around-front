@@ -1,7 +1,7 @@
 import Header from '@components/header';
 import DataTable from '@components/tables/common/data-table';
 import { userColumns } from '@components/tables/users/user-columns';
-import { DataTableToolbar } from '@components/tables/users/user-table-toolbar';
+import { DataTableToolbarUsers } from '@components/tables/users/user-table-toolbar';
 import { queryOptionsUserTable } from '@services/query/tables/useTableUser';
 import { UserFilters } from '@services/types/tables/User';
 import { createFileRoute } from '@tanstack/react-router';
@@ -21,7 +21,7 @@ function UsersComponent() {
   return (
     <>
       <Header title="Usuários" description="Listagem de todos os usuários da plataforma" />
-      <DataTable data={data} columns={columns} toolbar={DataTableToolbar} routeId={Route.id} />
+      <DataTable data={data} columns={columns} toolbar={DataTableToolbarUsers} routeId={Route.id} />
     </>
   );
 }
