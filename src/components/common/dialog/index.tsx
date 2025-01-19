@@ -30,14 +30,14 @@ export const DialogComponent = React.forwardRef<HTMLButtonElement, DialogType>(
             {buttonType === 'rowAction' ? <DeleteIcon /> : buttonText ? buttonText : 'Deletar'}
           </RoleButton>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="max-w-[320px] sm:max-w-[400px] md:max-w-[500px] rounded-lg">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>
               Após excluir os registros selecionados, não é possível recuperar esses registros.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className='gap-3'>
             <DialogClose asChild>
               <Button type="button" variant="outline">
                 Cancelar

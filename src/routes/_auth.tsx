@@ -54,7 +54,7 @@ function AuthComponent() {
   }
   return (
     <SidebarComponent>
-      <div className="px-3 max-lg:w-screen">
+      <div className="p-3 pt-0 max-lg:w-screen">
         <Outlet />
       </div>
     </SidebarComponent>
