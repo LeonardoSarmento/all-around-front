@@ -40,8 +40,12 @@ const DynamicFormSchema = z.object({
   description: z.string().optional(),
 
   label: z.string().optional(),
-
+  
   classnameitem: z.string().optional(),
+
+  classnamelabel: z.string().optional(),
+
+  classnamedescription: z.string().optional(),
 
   classnamemessage: z.string().optional(),
 });

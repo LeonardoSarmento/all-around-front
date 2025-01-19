@@ -83,9 +83,11 @@ export default function DynamicForm<TFieldValues extends FieldValues>({
       name={props.name}
       render={({ field }) => (
         <FormItem className={cn('flex flex-col space-y-0.5', props.classnameitem)}>
-          {props.hidelabel ? null : <FormLabel className="mb-1">{props.label}</FormLabel>}
+          {props.hidelabel ? null : <FormLabel className={cn('mb-1', props.classnamelabel)}>{props.label}</FormLabel>}
           {DynamicComponent({ field, hint, ...props })}
-          {props.hidedescription ? null : <FormDescription>{props.description}</FormDescription>}
+          {props.hidedescription ? null : (
+            <FormDescription className={cn('mb-1', props.classnamedescription)}>{props.description}</FormDescription>
+          )}
           {props.hideerrormessage ? null : <FormMessage className={props.classnamemessage} />}
         </FormItem>
       )}
@@ -417,7 +419,7 @@ function DynamicComponent<TFieldValues extends FieldValues>({
               {...inputRest.field}
               className={inputRest.className}
               placeholder={inputRest.placeholder}
-              maxLength={mask === 'phone' || mask === 'ip' ? 15 : mask === 'macAddress' ? 17 : undefined}
+              maxLength={mask === 'phone' ? 15 : undefined}
               onChange={(e) => {
                 const { value } = e.target;
                 if (mask) {
