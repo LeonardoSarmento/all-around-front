@@ -2,23 +2,11 @@ import { roleSchema } from '@services/types/Role';
 import { selectionSchema } from '@services/types/tables/FilterExtension';
 
 export const roles = [
-  {
-    id: roleSchema.Enum.ADMIN,
-    label: 'Administrador',
-  },
-  {
-    id: roleSchema.Enum.OPERATOR,
-    label: 'Operador',
-  },
+  { id: roleSchema.enum.ADMIN, label: 'Administrador' },
+  { id: roleSchema.enum.OPERATOR, label: 'Operador' },
 ];
 
 export const selection = [
-  {
-    id: selectionSchema.Enum.SELECTED,
-    label: 'Selecionados',
-  },
-  {
-    id: selectionSchema.Enum.NOT_SELECTED,
-    label: 'Não selecionados',
-  },
+  { id: selectionSchema.enum.SELECTED, label: 'Selecionados' },
+  { id: selectionSchema.enum.NOT_SELECTED, label: 'Não selecionados' },
 ];

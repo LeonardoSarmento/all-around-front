@@ -19,18 +19,18 @@ import { Icons } from '@components/icons/icon';
 type NavOptions = {
   title: string;
   url: LinkOptions['to'];
-  icon?: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => JSX.Element);
+  icon?: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => React.JSX.Element);
 };
 type OuterLink = {
   title: string;
   url: string;
-  icon?: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => JSX.Element);
+  icon?: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => React.JSX.Element);
 };
 
 type SidebarOptions = {
   title: string;
   url: LinkOptions['to'];
-  icon: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => JSX.Element);
+  icon: LucideIcon | ((props: React.SVGProps<SVGSVGElement>) => React.JSX.Element);
   isActive?: boolean;
   items?: NavOptions[];
 };
@@ -54,6 +54,16 @@ const data: SidebarMenuOptions = {
       url: '/calendar',
       icon: Icons.calendar,
       isActive: true,
+      items: [
+        {
+          title: 'Calendário V1',
+          url: '/calendar',
+        },
+        {
+          title: 'Calendário V2',
+          url: '/calendar/calendar-v2',
+        },
+      ],
     },
     {
       title: 'Componentes',
@@ -177,10 +187,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-        <SidebarMenuItem className="space-y-3">
+          <SidebarMenuItem className="space-y-3">
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <Link to="/">
+                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Icons.logo className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">

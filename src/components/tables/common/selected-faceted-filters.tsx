@@ -22,11 +22,11 @@ import { RegisteredRouter, RouteIds } from '@tanstack/react-router';
 
 const selectionOptions = [
   {
-    id: selectionSchema.Enum.SELECTED,
+    id: selectionSchema.enum.SELECTED,
     label: 'Selecionados',
   },
   {
-    id: selectionSchema.Enum.NOT_SELECTED,
+    id: selectionSchema.enum.NOT_SELECTED,
     label: 'Não selecionados',
   },
 ];

@@ -14,16 +14,23 @@ import { InputProps } from '@components/ui/input';
 import { SelectTriggerProps } from '@radix-ui/react-select';
 import { CalendarProps } from '@components/ui/calendar';
 import { AutosizeTextAreaProps } from '@components/ui/autosize-textarea';
-import cnpj from '../CNPJ';
+import { DropzoneOptions } from 'react-dropzone';
+import { ButtonProps } from '@components/ui/button';
+import { CheckboxProps } from '@radix-ui/react-checkbox';
+import * as SwitchPrimitives from '@radix-ui/react-switch';
+import * as SliderPrimitive from '@radix-ui/react-slider';
+import { Command as CommandPrimitive } from 'cmdk';
+import { LinkSchema } from './Link';
+import { HierarchicalCheckboxProps } from '@components/ui/extensions/hierarchical-checkbox';
+import { HierarchicalSchema } from './Hierarchical';
+import { SmartDatetimeInputProps } from '@components/ui/extensions/smart-datetime-input';
+import { DatetimeSchema } from './Datetime';
+import { SliderSchema } from './Slider';
+import cnpj from './CNPJ';
 import { PhoneSchema } from './Phone';
 import { MacAddress } from './MacAddress';
 import { IpSchema } from './Ip';
 import { CpfSchema } from './Cpf';
-import { ButtonProps } from '@components/ui/button';
-import { CheckboxProps } from '@radix-ui/react-checkbox';
-import { DropzoneOptions } from 'react-dropzone';
-import * as SwitchPrimitives from '@radix-ui/react-switch';
-import { Command as CommandPrimitive } from 'cmdk';
 
 const DynamicFormSchema = z.object({
   /* Texto que será renderizado antes do usuários preencher o campo ou título do componente. */
@@ -40,7 +47,7 @@ const DynamicFormSchema = z.object({
   description: z.string().optional(),
 
   label: z.string().optional(),
-  
+
   classnameitem: z.string().optional(),
 
   classnamelabel: z.string().optional(),
@@ -51,7 +58,7 @@ const DynamicFormSchema = z.object({
 });
 
 export const baseInputSchema = z.object({
-  type: z.enum(['input', 'password', 'number', 'textarea']),
+  type: z.enum(['input', 'password', 'number', 'hierarchical', 'textarea', 'link']),
   placeholder: z.string(),
   mask: z
     .union([
@@ -60,7 +67,8 @@ export const baseInputSchema = z.object({
       z.literal('ip'),
       z.literal('macAddress'),
       z.literal('phone'),
-      z.function().args(z.string()).returns(z.string()),
+      z.literal('currency'),
+      z.function({ input: z.tuple([z.string()]), output: z.string() }),
     ])
     .optional(),
 });
@@ -84,6 +92,8 @@ export const MultiSelectInputSchema = z.object({
   type: z.literal('multi-select'),
   /* Array de opções para o component de multi-select. */
   multiselectoptions: MultiSelectOptionsSchema,
+  disabledTrigger: z.boolean().optional(),
+  itensShown: z.number().optional(),
   placeholder: z.string().optional(),
 });
 
@@ -91,6 +101,17 @@ export const CheckboxInputSchema = z.object({
   /* Array de opções para o component de checkbox. */
   type: z.literal('checkbox'),
   checkboxoptions: CheckboxOptionsSchema,
+});
+
+export const SliderInputSchema = z.object({
+  /* Array de opções para o component de select. */
+  type: z.literal('slider'),
+  placeholder: z.string().optional(),
+  unit: z.string().optional(),
+  min: z.number().optional(),
+  max: z.number().optional(),
+  step: z.number().optional(),
+  titles: z.array(z.string()).max(2).optional(),
 });
 
 export const SwitchInputSchema = z.object({
@@ -103,15 +124,24 @@ export const FileUploadInputSchema = z.object({
   /* Array de opções para o component de file upload. */
   type: z.literal('file-upload'),
   disabled: z.boolean().optional(),
+  reSelect: z.boolean().optional(),
 });
 
 export const DateInputSchema = z.object({
   /* Array de opções para o component de date. */
   type: z.literal('date'),
   placeholder: z.string().optional(),
+  disabledInput: z.boolean().optional(),
   customLocale: DateLocaleSchema.optional(),
   mode: DateModeSchema,
   format: z.enum(['long', 'short']).default('long').optional(),
+});
+
+export const SmartDatetimeInputSchema = z.object({
+  /* Array de opções para o component de select. */
+  type: z.literal('datetime-input'),
+  placeholder: z.string().optional(),
+  disabled: z.union([z.boolean(), z.function({ input: z.tuple([z.date()]), output: z.boolean() })]).optional(),
 });
 
 export const RadioInputSchema = z.object({
@@ -128,9 +158,11 @@ export const DynamicFormTypeSchema = z
     MultiSelectInputSchema,
     RadioInputSchema,
     SelectInputSchema,
+    SliderInputSchema,
     SwitchInputSchema,
     FileUploadInputSchema,
     DateInputSchema,
+    SmartDatetimeInputSchema,
   ])
   .and(DynamicFormSchema);
 
@@ -146,44 +178,31 @@ export type DynamicFormType<TFieldValues extends FieldValues> = z.infer<typeof D
 
 export type BaseInputT = z.infer<typeof baseInputSchema>;
 
-type PasswordT = {
-  type: 'password';
-} & InputProps;
+type PasswordT = { type: 'password' } & InputProps;
 
-type NumberT = {
-  type: 'number';
-} & InputProps;
+type NumberT = { type: 'number'; allownegative?: boolean } & InputProps;
 
-type TextAreaT = {
-  type: 'textarea';
-} & AutosizeTextAreaProps;
+type TextAreaT = { type: 'textarea' } & AutosizeTextAreaProps;
 
-type DateT = {
-  type: 'date';
-} & CalendarProps;
+type DateT = { type: 'date' } & CalendarProps;
 
-type SelectT = {
-  type: 'select';
-} & Omit<SelectTriggerProps, 'type'> &
-  React.RefAttributes<HTMLButtonElement>;
+type SmartDateTimeT = { type: 'datetime-input' } & SmartDatetimeInputProps;
+
+type HierarchicalT = { type: 'hierarchical' } & HierarchicalCheckboxProps;
+
+type SliderT = Omit<React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>, 'type'> & { type: 'slider' };
+
+type SelectT = { type: 'select' } & Omit<SelectTriggerProps, 'type'> & React.RefAttributes<HTMLButtonElement>;
 
 type MultiSelectT = Omit<React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>, 'type'> & {
   type: 'multi-select';
 };
 
-type SwitchT = Omit<React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>, 'type'> & {
-  type: 'switch';
-};
+type SwitchT = Omit<React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>, 'type'> & { type: 'switch' };
 
-type CheckboxT = {
-  type: 'checkbox';
-} & Omit<CheckboxProps, 'type'> &
-  React.RefAttributes<HTMLButtonElement>;
+type CheckboxT = { type: 'checkbox' } & Omit<CheckboxProps, 'type'> & React.RefAttributes<HTMLButtonElement>;
 
-type RadioT = {
-  type: 'radio';
-} & RadioGroupProps &
-  React.RefAttributes<HTMLDivElement>;
+type RadioT = { type: 'radio' } & RadioGroupProps & React.RefAttributes<HTMLDivElement>;
 
 type ComboboxItemT = {
   type: 'combobox';
@@ -192,73 +211,75 @@ type ComboboxItemT = {
 } & Omit<ButtonProps, 'type'> &
   React.RefAttributes<HTMLButtonElement>;
 
-type FileUploadT = {
-  type: 'file-upload';
-  dropzone?: DropzoneOptions;
-} & React.HTMLAttributes<HTMLDivElement> & {
+type FileUploadT = { type: 'file-upload'; dropzone?: DropzoneOptions } & React.HTMLAttributes<HTMLDivElement> & {
     disabled?: boolean;
   } & React.RefAttributes<HTMLDivElement>;
 
-type InputT = {
-  type: 'input';
-} & InputProps;
+type SystemFileUploadT = {
+  type: 'system-file-upload';
+  dropzone?: DropzoneOptions;
+} & React.HTMLAttributes<HTMLDivElement> & { disabled?: boolean } & React.RefAttributes<HTMLDivElement>;
+
+type LinkT = { type: 'link' } & InputProps;
+
+type InputT = { type: 'input' } & InputProps;
 
 export type ExtendedFormProps =
   | PasswordT
   | NumberT
   | TextAreaT
   | DateT
+  | SmartDateTimeT
   | SelectT
+  | SliderT
   | SwitchT
   | MultiSelectT
   | CheckboxT
   | RadioT
   | ComboboxItemT
   | FileUploadT
+  | SystemFileUploadT
+  | LinkT
+  | HierarchicalT
   | InputT;
 
 export const DynamicSchemaTestingComponent = z.object({
-  input: z
-    .string({
-      required_error: 'Conteúdo é obrigatório.',
-    })
-    .min(2, { message: 'Conteúdo deve ter pelo menos 2 caracteres.' })
-    .trim(),
-  email: z.string().email({ message: 'E-mail inválido.' }).trim(),
-  link: z
-    .string()
-    .refine((value) => /^(https?):\/\/(?=.*\.[a-z]{2,})[^\s$.?#].[^\s]*$/i.test(value), {
-      message: 'Por favor, escreva uma URL válida.',
-    })
-    .optional(),
+  input: z.string('Conteúdo é obrigatório.').min(2, { message: 'Conteúdo deve ter pelo menos 2 caracteres.' }).trim(),
+  email: z.email({ error: (iss) => (iss.input === undefined ? 'E-mail é obrigatório.' : 'E-mail inválido') }).trim(),
   cnpj: cnpj(),
+  link: LinkSchema,
   phone: PhoneSchema,
   macAddress: MacAddress,
   ip: IpSchema,
   cpf: CpfSchema,
   password: z
-    .string({ required_error: 'Senha é obrigatória.' })
-    .min(8, {
-      message: 'Senha deve conter no mínimo 8 caracteres.',
-    })
+    .string('Senha é obrigatória.')
+    .min(8, { message: 'Senha deve conter no mínimo 8 caracteres.' })
     .trim()
     .regex(new RegExp('.*[A-Z].*'), { message: 'Senha deve conter pelo menos uma letra maiúscula.' })
     .regex(new RegExp('.*[a-z].*'), { message: 'Senha deve conter pelo menos uma letra minúscula.' })
     .regex(new RegExp('.*\\d.*'), { message: 'Senha deve conter pelo menos um número' })
-    .regex(new RegExp('.*[!@#$%^&*.].*'), {
-      message: 'Senha deve conter pelo menos um caractere especial: !@#$%^&*.',
-    })
+    .regex(new RegExp('.*[!@#$%^&*.].*'), { message: 'Senha deve conter pelo menos um caractere especial: !@#$%^&*.' })
     .trim(),
-  number: z.number().int().positive().min(1, 'Valor mínimo de 1.').max(100, 'Valor máximo de 100.'),
+  number: z
+    .number('Número é obrigatório.')
+    .int()
+    .positive()
+    .min(1, 'Valor mínimo de 1.')
+    .max(100, 'Valor máximo de 100.'),
   checkbox: CheckboxSchema,
   combobox: ComboboxSchema,
   select: SelectSchema,
+  slider: SliderSchema,
+  sliderDouble: SliderSchema,
   multiSelect: MultiSelectSchema,
+  hierarchical: HierarchicalSchema,
   radio: RadioSchema,
   switch: SwitchSchema,
   textarea: TextareaSchema,
   fileUpload: FileUploadSchema,
   date: DateSchema,
+  datetime: DatetimeSchema,
   rangeDate: DateRangeSchema,
 });
 export type DynamicSchemaTestingComponentType = z.infer<typeof DynamicSchemaTestingComponent>;

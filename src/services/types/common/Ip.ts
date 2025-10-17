@@ -22,14 +22,12 @@ export function applyIPMask(value: string): string {
 }
 
 export const IpSchema = z
-  .string()
+  .string('IP é obrigatório.')
   .min(1, { message: 'IP não pode ser vazio' })
   .refine(
     (ip) => {
       const regex = IP_REGEX;
       return regex.test(ip);
     },
-    {
-      message: 'Formato de IP inválido',
-    },
+    { message: 'Formato de IP inválido' },
   );

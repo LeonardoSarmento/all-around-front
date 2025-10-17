@@ -16,9 +16,7 @@ export const Breadcrumbs = () => {
           <React.Fragment key={`breadcrumbItem-${match.id}`}>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link from={match.fullPath}>
-                  {match.loaderData?.crumb}
-                </Link>
+                <Link from={match.fullPath}>{match.loaderData?.crumb}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             {i + 1 < matchesWithCrumbs.length ? <BreadcrumbSeparator /> : null}

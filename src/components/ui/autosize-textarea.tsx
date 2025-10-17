@@ -1,6 +1,10 @@
+'use client';
+
 import * as React from 'react';
-import { cn } from '@lib/utils';
+
 import { useImperativeHandle } from 'react';
+
+import { cn } from '../../lib/utils';
 
 interface UseAutosizeTextAreaProps {
   textAreaRef: HTMLTextAreaElement | null;
@@ -40,11 +44,7 @@ export const useAutosizeTextArea = ({
   }, [textAreaRef, triggerAutoSize]);
 };
 
-export type AutosizeTextAreaRef = {
-  textArea: HTMLTextAreaElement;
-  maxHeight: number;
-  minHeight: number;
-};
+export type AutosizeTextAreaRef = { textArea: HTMLTextAreaElement; maxHeight: number; minHeight: number };
 
 export type AutosizeTextAreaProps = {
   maxHeight?: number;
@@ -66,12 +66,7 @@ export const AutosizeTextarea = React.forwardRef<AutosizeTextAreaRef, AutosizeTe
     const textAreaRef = React.useRef<HTMLTextAreaElement | null>(null);
     const [triggerAutoSize, setTriggerAutoSize] = React.useState('');
 
-    useAutosizeTextArea({
-      textAreaRef: textAreaRef.current,
-      triggerAutoSize: triggerAutoSize,
-      maxHeight,
-      minHeight,
-    });
+    useAutosizeTextArea({ textAreaRef: textAreaRef.current, triggerAutoSize: triggerAutoSize, maxHeight, minHeight });
 
     useImperativeHandle(ref, () => ({
       textArea: textAreaRef.current as HTMLTextAreaElement,
@@ -90,7 +85,7 @@ export const AutosizeTextarea = React.forwardRef<AutosizeTextAreaRef, AutosizeTe
         value={value}
         ref={textAreaRef}
         className={cn(
-          'flex w-full rounded-md border border-primary bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+          'border-primary bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-primary flex w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
           className,
         )}
         onChange={(e) => {

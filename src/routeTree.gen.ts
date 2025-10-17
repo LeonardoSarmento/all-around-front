@@ -8,110 +8,195 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as AuthUsersRouteImport } from './routes/_auth/users'
+import { Route as AuthComponentsRouteImport } from './routes/_auth/components'
+import { Route as AuthChartsRouteImport } from './routes/_auth/charts'
+import { Route as AuthCalendarRouteImport } from './routes/_auth/calendar'
+import { Route as AuthUsersIndexRouteImport } from './routes/_auth/users/index'
+import { Route as AuthComponentsIndexRouteImport } from './routes/_auth/components/index'
+import { Route as AuthChartsIndexRouteImport } from './routes/_auth/charts/index'
+import { Route as AuthCalendarIndexRouteImport } from './routes/_auth/calendar/index'
+import { Route as AuthUsersCreateRouteImport } from './routes/_auth/users/create'
+import { Route as AuthUsersUserIdRouteImport } from './routes/_auth/users/$userId'
+import { Route as AuthChartsLineRouteImport } from './routes/_auth/charts/line'
+import { Route as AuthChartsBarRouteImport } from './routes/_auth/charts/bar'
+import { Route as AuthCalendarCalendarV2RouteImport } from './routes/_auth/calendar/calendar-v2'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as AuthImport } from './routes/_auth'
-import { Route as AuthIndexImport } from './routes/_auth/index'
-import { Route as AuthUsersImport } from './routes/_auth/users'
-import { Route as AuthComponentsImport } from './routes/_auth/components'
-import { Route as AuthChartsImport } from './routes/_auth/charts'
-import { Route as AuthCalendarImport } from './routes/_auth/calendar'
-import { Route as AuthUsersIndexImport } from './routes/_auth/users/index'
-import { Route as AuthComponentsIndexImport } from './routes/_auth/components/index'
-import { Route as AuthChartsIndexImport } from './routes/_auth/charts/index'
-import { Route as AuthCalendarIndexImport } from './routes/_auth/calendar/index'
-import { Route as AuthUsersCreateImport } from './routes/_auth/users/create'
-import { Route as AuthUsersUserIdImport } from './routes/_auth/users/$userId'
-import { Route as AuthChartsLineImport } from './routes/_auth/charts/line'
-import { Route as AuthChartsBarImport } from './routes/_auth/charts/bar'
-
-// Create/Update Routes
-
-const AuthRoute = AuthImport.update({
+const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthIndexRoute = AuthIndexImport.update({
+const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthUsersRoute = AuthUsersImport.update({
+const AuthUsersRoute = AuthUsersRouteImport.update({
   id: '/users',
   path: '/users',
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthComponentsRoute = AuthComponentsImport.update({
+const AuthComponentsRoute = AuthComponentsRouteImport.update({
   id: '/components',
   path: '/components',
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthChartsRoute = AuthChartsImport.update({
+const AuthChartsRoute = AuthChartsRouteImport.update({
   id: '/charts',
   path: '/charts',
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthCalendarRoute = AuthCalendarImport.update({
+const AuthCalendarRoute = AuthCalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
   getParentRoute: () => AuthRoute,
 } as any)
-
-const AuthUsersIndexRoute = AuthUsersIndexImport.update({
+const AuthUsersIndexRoute = AuthUsersIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthUsersRoute,
 } as any)
-
-const AuthComponentsIndexRoute = AuthComponentsIndexImport.update({
+const AuthComponentsIndexRoute = AuthComponentsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthComponentsRoute,
 } as any)
-
-const AuthChartsIndexRoute = AuthChartsIndexImport.update({
+const AuthChartsIndexRoute = AuthChartsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthChartsRoute,
 } as any)
-
-const AuthCalendarIndexRoute = AuthCalendarIndexImport.update({
+const AuthCalendarIndexRoute = AuthCalendarIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthCalendarRoute,
 } as any)
-
-const AuthUsersCreateRoute = AuthUsersCreateImport.update({
+const AuthUsersCreateRoute = AuthUsersCreateRouteImport.update({
   id: '/create',
   path: '/create',
   getParentRoute: () => AuthUsersRoute,
 } as any)
-
-const AuthUsersUserIdRoute = AuthUsersUserIdImport.update({
+const AuthUsersUserIdRoute = AuthUsersUserIdRouteImport.update({
   id: '/$userId',
   path: '/$userId',
   getParentRoute: () => AuthUsersRoute,
 } as any)
-
-const AuthChartsLineRoute = AuthChartsLineImport.update({
+const AuthChartsLineRoute = AuthChartsLineRouteImport.update({
   id: '/line',
   path: '/line',
   getParentRoute: () => AuthChartsRoute,
 } as any)
-
-const AuthChartsBarRoute = AuthChartsBarImport.update({
+const AuthChartsBarRoute = AuthChartsBarRouteImport.update({
   id: '/bar',
   path: '/bar',
   getParentRoute: () => AuthChartsRoute,
 } as any)
+const AuthCalendarCalendarV2Route = AuthCalendarCalendarV2RouteImport.update({
+  id: '/calendar-v2',
+  path: '/calendar-v2',
+  getParentRoute: () => AuthCalendarRoute,
+} as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/calendar': typeof AuthCalendarRouteWithChildren
+  '/charts': typeof AuthChartsRouteWithChildren
+  '/components': typeof AuthComponentsRouteWithChildren
+  '/users': typeof AuthUsersRouteWithChildren
+  '/': typeof AuthIndexRoute
+  '/calendar/calendar-v2': typeof AuthCalendarCalendarV2Route
+  '/charts/bar': typeof AuthChartsBarRoute
+  '/charts/line': typeof AuthChartsLineRoute
+  '/users/$userId': typeof AuthUsersUserIdRoute
+  '/users/create': typeof AuthUsersCreateRoute
+  '/calendar/': typeof AuthCalendarIndexRoute
+  '/charts/': typeof AuthChartsIndexRoute
+  '/components/': typeof AuthComponentsIndexRoute
+  '/users/': typeof AuthUsersIndexRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof AuthIndexRoute
+  '/calendar/calendar-v2': typeof AuthCalendarCalendarV2Route
+  '/charts/bar': typeof AuthChartsBarRoute
+  '/charts/line': typeof AuthChartsLineRoute
+  '/users/$userId': typeof AuthUsersUserIdRoute
+  '/users/create': typeof AuthUsersCreateRoute
+  '/calendar': typeof AuthCalendarIndexRoute
+  '/charts': typeof AuthChartsIndexRoute
+  '/components': typeof AuthComponentsIndexRoute
+  '/users': typeof AuthUsersIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/_auth': typeof AuthRouteWithChildren
+  '/_auth/calendar': typeof AuthCalendarRouteWithChildren
+  '/_auth/charts': typeof AuthChartsRouteWithChildren
+  '/_auth/components': typeof AuthComponentsRouteWithChildren
+  '/_auth/users': typeof AuthUsersRouteWithChildren
+  '/_auth/': typeof AuthIndexRoute
+  '/_auth/calendar/calendar-v2': typeof AuthCalendarCalendarV2Route
+  '/_auth/charts/bar': typeof AuthChartsBarRoute
+  '/_auth/charts/line': typeof AuthChartsLineRoute
+  '/_auth/users/$userId': typeof AuthUsersUserIdRoute
+  '/_auth/users/create': typeof AuthUsersCreateRoute
+  '/_auth/calendar/': typeof AuthCalendarIndexRoute
+  '/_auth/charts/': typeof AuthChartsIndexRoute
+  '/_auth/components/': typeof AuthComponentsIndexRoute
+  '/_auth/users/': typeof AuthUsersIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/calendar'
+    | '/charts'
+    | '/components'
+    | '/users'
+    | '/'
+    | '/calendar/calendar-v2'
+    | '/charts/bar'
+    | '/charts/line'
+    | '/users/$userId'
+    | '/users/create'
+    | '/calendar/'
+    | '/charts/'
+    | '/components/'
+    | '/users/'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/calendar/calendar-v2'
+    | '/charts/bar'
+    | '/charts/line'
+    | '/users/$userId'
+    | '/users/create'
+    | '/calendar'
+    | '/charts'
+    | '/components'
+    | '/users'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/_auth/calendar'
+    | '/_auth/charts'
+    | '/_auth/components'
+    | '/_auth/users'
+    | '/_auth/'
+    | '/_auth/calendar/calendar-v2'
+    | '/_auth/charts/bar'
+    | '/_auth/charts/line'
+    | '/_auth/users/$userId'
+    | '/_auth/users/create'
+    | '/_auth/calendar/'
+    | '/_auth/charts/'
+    | '/_auth/components/'
+    | '/_auth/users/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  AuthRoute: typeof AuthRouteWithChildren
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
@@ -119,110 +204,117 @@ declare module '@tanstack/react-router' {
       id: '/_auth'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthImport
-      parentRoute: typeof rootRoute
-    }
-    '/_auth/calendar': {
-      id: '/_auth/calendar'
-      path: '/calendar'
-      fullPath: '/calendar'
-      preLoaderRoute: typeof AuthCalendarImport
-      parentRoute: typeof AuthImport
-    }
-    '/_auth/charts': {
-      id: '/_auth/charts'
-      path: '/charts'
-      fullPath: '/charts'
-      preLoaderRoute: typeof AuthChartsImport
-      parentRoute: typeof AuthImport
-    }
-    '/_auth/components': {
-      id: '/_auth/components'
-      path: '/components'
-      fullPath: '/components'
-      preLoaderRoute: typeof AuthComponentsImport
-      parentRoute: typeof AuthImport
-    }
-    '/_auth/users': {
-      id: '/_auth/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof AuthUsersImport
-      parentRoute: typeof AuthImport
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_auth/': {
       id: '/_auth/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthIndexImport
-      parentRoute: typeof AuthImport
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/_auth/charts/bar': {
-      id: '/_auth/charts/bar'
-      path: '/bar'
-      fullPath: '/charts/bar'
-      preLoaderRoute: typeof AuthChartsBarImport
-      parentRoute: typeof AuthChartsImport
+    '/_auth/users': {
+      id: '/_auth/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthUsersRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/_auth/charts/line': {
-      id: '/_auth/charts/line'
-      path: '/line'
-      fullPath: '/charts/line'
-      preLoaderRoute: typeof AuthChartsLineImport
-      parentRoute: typeof AuthChartsImport
+    '/_auth/components': {
+      id: '/_auth/components'
+      path: '/components'
+      fullPath: '/components'
+      preLoaderRoute: typeof AuthComponentsRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/_auth/users/$userId': {
-      id: '/_auth/users/$userId'
-      path: '/$userId'
-      fullPath: '/users/$userId'
-      preLoaderRoute: typeof AuthUsersUserIdImport
-      parentRoute: typeof AuthUsersImport
+    '/_auth/charts': {
+      id: '/_auth/charts'
+      path: '/charts'
+      fullPath: '/charts'
+      preLoaderRoute: typeof AuthChartsRouteImport
+      parentRoute: typeof AuthRoute
     }
-    '/_auth/users/create': {
-      id: '/_auth/users/create'
-      path: '/create'
-      fullPath: '/users/create'
-      preLoaderRoute: typeof AuthUsersCreateImport
-      parentRoute: typeof AuthUsersImport
-    }
-    '/_auth/calendar/': {
-      id: '/_auth/calendar/'
-      path: '/'
-      fullPath: '/calendar/'
-      preLoaderRoute: typeof AuthCalendarIndexImport
-      parentRoute: typeof AuthCalendarImport
-    }
-    '/_auth/charts/': {
-      id: '/_auth/charts/'
-      path: '/'
-      fullPath: '/charts/'
-      preLoaderRoute: typeof AuthChartsIndexImport
-      parentRoute: typeof AuthChartsImport
-    }
-    '/_auth/components/': {
-      id: '/_auth/components/'
-      path: '/'
-      fullPath: '/components/'
-      preLoaderRoute: typeof AuthComponentsIndexImport
-      parentRoute: typeof AuthComponentsImport
+    '/_auth/calendar': {
+      id: '/_auth/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof AuthCalendarRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/_auth/users/': {
       id: '/_auth/users/'
       path: '/'
       fullPath: '/users/'
-      preLoaderRoute: typeof AuthUsersIndexImport
-      parentRoute: typeof AuthUsersImport
+      preLoaderRoute: typeof AuthUsersIndexRouteImport
+      parentRoute: typeof AuthUsersRoute
+    }
+    '/_auth/components/': {
+      id: '/_auth/components/'
+      path: '/'
+      fullPath: '/components/'
+      preLoaderRoute: typeof AuthComponentsIndexRouteImport
+      parentRoute: typeof AuthComponentsRoute
+    }
+    '/_auth/charts/': {
+      id: '/_auth/charts/'
+      path: '/'
+      fullPath: '/charts/'
+      preLoaderRoute: typeof AuthChartsIndexRouteImport
+      parentRoute: typeof AuthChartsRoute
+    }
+    '/_auth/calendar/': {
+      id: '/_auth/calendar/'
+      path: '/'
+      fullPath: '/calendar/'
+      preLoaderRoute: typeof AuthCalendarIndexRouteImport
+      parentRoute: typeof AuthCalendarRoute
+    }
+    '/_auth/users/create': {
+      id: '/_auth/users/create'
+      path: '/create'
+      fullPath: '/users/create'
+      preLoaderRoute: typeof AuthUsersCreateRouteImport
+      parentRoute: typeof AuthUsersRoute
+    }
+    '/_auth/users/$userId': {
+      id: '/_auth/users/$userId'
+      path: '/$userId'
+      fullPath: '/users/$userId'
+      preLoaderRoute: typeof AuthUsersUserIdRouteImport
+      parentRoute: typeof AuthUsersRoute
+    }
+    '/_auth/charts/line': {
+      id: '/_auth/charts/line'
+      path: '/line'
+      fullPath: '/charts/line'
+      preLoaderRoute: typeof AuthChartsLineRouteImport
+      parentRoute: typeof AuthChartsRoute
+    }
+    '/_auth/charts/bar': {
+      id: '/_auth/charts/bar'
+      path: '/bar'
+      fullPath: '/charts/bar'
+      preLoaderRoute: typeof AuthChartsBarRouteImport
+      parentRoute: typeof AuthChartsRoute
+    }
+    '/_auth/calendar/calendar-v2': {
+      id: '/_auth/calendar/calendar-v2'
+      path: '/calendar-v2'
+      fullPath: '/calendar/calendar-v2'
+      preLoaderRoute: typeof AuthCalendarCalendarV2RouteImport
+      parentRoute: typeof AuthCalendarRoute
     }
   }
 }
 
-// Create and export the route tree
-
 interface AuthCalendarRouteChildren {
+  AuthCalendarCalendarV2Route: typeof AuthCalendarCalendarV2Route
   AuthCalendarIndexRoute: typeof AuthCalendarIndexRoute
 }
 
 const AuthCalendarRouteChildren: AuthCalendarRouteChildren = {
+  AuthCalendarCalendarV2Route: AuthCalendarCalendarV2Route,
   AuthCalendarIndexRoute: AuthCalendarIndexRoute,
 }
 
@@ -292,199 +384,9 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
-export interface FileRoutesByFullPath {
-  '': typeof AuthRouteWithChildren
-  '/calendar': typeof AuthCalendarRouteWithChildren
-  '/charts': typeof AuthChartsRouteWithChildren
-  '/components': typeof AuthComponentsRouteWithChildren
-  '/users': typeof AuthUsersRouteWithChildren
-  '/': typeof AuthIndexRoute
-  '/charts/bar': typeof AuthChartsBarRoute
-  '/charts/line': typeof AuthChartsLineRoute
-  '/users/$userId': typeof AuthUsersUserIdRoute
-  '/users/create': typeof AuthUsersCreateRoute
-  '/calendar/': typeof AuthCalendarIndexRoute
-  '/charts/': typeof AuthChartsIndexRoute
-  '/components/': typeof AuthComponentsIndexRoute
-  '/users/': typeof AuthUsersIndexRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof AuthIndexRoute
-  '/charts/bar': typeof AuthChartsBarRoute
-  '/charts/line': typeof AuthChartsLineRoute
-  '/users/$userId': typeof AuthUsersUserIdRoute
-  '/users/create': typeof AuthUsersCreateRoute
-  '/calendar': typeof AuthCalendarIndexRoute
-  '/charts': typeof AuthChartsIndexRoute
-  '/components': typeof AuthComponentsIndexRoute
-  '/users': typeof AuthUsersIndexRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/_auth': typeof AuthRouteWithChildren
-  '/_auth/calendar': typeof AuthCalendarRouteWithChildren
-  '/_auth/charts': typeof AuthChartsRouteWithChildren
-  '/_auth/components': typeof AuthComponentsRouteWithChildren
-  '/_auth/users': typeof AuthUsersRouteWithChildren
-  '/_auth/': typeof AuthIndexRoute
-  '/_auth/charts/bar': typeof AuthChartsBarRoute
-  '/_auth/charts/line': typeof AuthChartsLineRoute
-  '/_auth/users/$userId': typeof AuthUsersUserIdRoute
-  '/_auth/users/create': typeof AuthUsersCreateRoute
-  '/_auth/calendar/': typeof AuthCalendarIndexRoute
-  '/_auth/charts/': typeof AuthChartsIndexRoute
-  '/_auth/components/': typeof AuthComponentsIndexRoute
-  '/_auth/users/': typeof AuthUsersIndexRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | ''
-    | '/calendar'
-    | '/charts'
-    | '/components'
-    | '/users'
-    | '/'
-    | '/charts/bar'
-    | '/charts/line'
-    | '/users/$userId'
-    | '/users/create'
-    | '/calendar/'
-    | '/charts/'
-    | '/components/'
-    | '/users/'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/charts/bar'
-    | '/charts/line'
-    | '/users/$userId'
-    | '/users/create'
-    | '/calendar'
-    | '/charts'
-    | '/components'
-    | '/users'
-  id:
-    | '__root__'
-    | '/_auth'
-    | '/_auth/calendar'
-    | '/_auth/charts'
-    | '/_auth/components'
-    | '/_auth/users'
-    | '/_auth/'
-    | '/_auth/charts/bar'
-    | '/_auth/charts/line'
-    | '/_auth/users/$userId'
-    | '/_auth/users/create'
-    | '/_auth/calendar/'
-    | '/_auth/charts/'
-    | '/_auth/components/'
-    | '/_auth/users/'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  AuthRoute: typeof AuthRouteWithChildren
-}
-
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/_auth"
-      ]
-    },
-    "/_auth": {
-      "filePath": "_auth.tsx",
-      "children": [
-        "/_auth/calendar",
-        "/_auth/charts",
-        "/_auth/components",
-        "/_auth/users",
-        "/_auth/"
-      ]
-    },
-    "/_auth/calendar": {
-      "filePath": "_auth/calendar.tsx",
-      "parent": "/_auth",
-      "children": [
-        "/_auth/calendar/"
-      ]
-    },
-    "/_auth/charts": {
-      "filePath": "_auth/charts.tsx",
-      "parent": "/_auth",
-      "children": [
-        "/_auth/charts/bar",
-        "/_auth/charts/line",
-        "/_auth/charts/"
-      ]
-    },
-    "/_auth/components": {
-      "filePath": "_auth/components.tsx",
-      "parent": "/_auth",
-      "children": [
-        "/_auth/components/"
-      ]
-    },
-    "/_auth/users": {
-      "filePath": "_auth/users.tsx",
-      "parent": "/_auth",
-      "children": [
-        "/_auth/users/$userId",
-        "/_auth/users/create",
-        "/_auth/users/"
-      ]
-    },
-    "/_auth/": {
-      "filePath": "_auth/index.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/charts/bar": {
-      "filePath": "_auth/charts/bar.tsx",
-      "parent": "/_auth/charts"
-    },
-    "/_auth/charts/line": {
-      "filePath": "_auth/charts/line.tsx",
-      "parent": "/_auth/charts"
-    },
-    "/_auth/users/$userId": {
-      "filePath": "_auth/users/$userId.tsx",
-      "parent": "/_auth/users"
-    },
-    "/_auth/users/create": {
-      "filePath": "_auth/users/create.tsx",
-      "parent": "/_auth/users"
-    },
-    "/_auth/calendar/": {
-      "filePath": "_auth/calendar/index.tsx",
-      "parent": "/_auth/calendar"
-    },
-    "/_auth/charts/": {
-      "filePath": "_auth/charts/index.tsx",
-      "parent": "/_auth/charts"
-    },
-    "/_auth/components/": {
-      "filePath": "_auth/components/index.tsx",
-      "parent": "/_auth/components"
-    },
-    "/_auth/users/": {
-      "filePath": "_auth/users/index.tsx",
-      "parent": "/_auth/users"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

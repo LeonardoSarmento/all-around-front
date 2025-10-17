@@ -9,9 +9,6 @@ import { Icons } from '@components/icons/icon';
 
 export const Route = createFileRoute('/_auth')({
   component: AuthComponent,
-  loader: () => ({
-    crumb: 'Página Inicial',
-  }),
 });
 
 function IsAuthenticated() {
@@ -22,7 +19,7 @@ function IsAuthenticated() {
 function AuthenticateComponent() {
   return (
     <div className="flex min-h-screen w-full flex-col content-around items-center justify-center space-y-20 px-3">
-      <div className="flex flex-col items-center justify-center gap-3 text-center px-6">
+      <div className="flex flex-col items-center justify-center gap-3 px-6 text-center">
         <H1>Template project</H1>
         <H3>
           Um template para projetos React utilizando Tanstack Router, Tanstack Query, Shadcn/UI, React Hook Form e Zod

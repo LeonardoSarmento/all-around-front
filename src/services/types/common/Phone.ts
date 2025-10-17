@@ -21,7 +21,7 @@ export const applyPhoneMask = (value: string) => {
 };
 
 export const PhoneSchema = z
-  .string({ required_error: 'Telefone é obrigatório' })
+  .string('Telefone é obrigatório')
   .min(1, { message: 'Telefone não pode ser vazio' })
   .transform((val) => applyPhoneMask(val)) // Aplica a máscara
   .refine(
@@ -29,7 +29,5 @@ export const PhoneSchema = z
       const digits = val.replace(/\D/g, ''); // Remove a máscara para validação
       return PHONE_REGEX.test(val) && (digits.length === 10 || digits.length === 11);
     },
-    {
-      message: 'Telefone inválido. Formato esperado: (XX) XXXX-XXXX ou (XX) 9XXXX-XXXX',
-    },
+    { message: 'Telefone inválido. Formato esperado: (XX) XXXX-XXXX ou (XX) 9XXXX-XXXX' },
   );

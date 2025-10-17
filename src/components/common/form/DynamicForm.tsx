@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@components/ui/form';
 import { Input, InputPassword } from '@components/ui/input';
 import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
@@ -16,8 +17,7 @@ import {
   FileUploaderContent,
   FileUploaderItem,
 } from '@components/ui/extensions/file-uploader';
-import { DropzoneOptions } from 'react-dropzone';
-import { CalendarIcon, Check, ChevronsUpDown, Paperclip } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown, Paperclip, Trash2, Upload } from 'lucide-react';
 import { BaseInputT, DynamicFormType } from '@services/types/common/DynamicFormType';
 import { Checkbox } from '@components/ui/checkbox';
 import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover';
@@ -29,49 +29,17 @@ import { Switch } from '@components/ui/switch';
 import { AutosizeTextarea } from '@components/ui/autosize-textarea';
 import { intlFormat } from 'date-fns';
 import { Calendar } from '@components/ui/calendar';
-import { applyCNPJMask } from '@services/types/CNPJ';
-import { applyPhoneMask } from '@services/types/common/Phone';
-import { applyMacAddressMask } from '@services/types/common/MacAddress';
-import { applyIPMask } from '@services/types/common/Ip';
+import { applyCNPJMask } from '@services/types/common/CNPJ';
 import { applyCPFMask } from '@services/types/common/Cpf';
-
-const FileSvgDraw = () => {
-  return (
-    <>
-      <svg
-        className="mb-3 h-8 w-8 text-gray-500 dark:text-gray-400"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 20 16"
-      >
-        <path
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-        />
-      </svg>
-      <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-        <span className="font-semibold">Arraste seu arquivo</span>
-        &nbsp; ou clique para selecionar
-      </p>
-      <p className="text-xs text-gray-500 dark:text-gray-400">formato permitido: .CSV</p>
-    </>
-  );
-};
-
-const dropzone = {
-  accept: {
-    // 'image/*': ['.jpg', '.jpeg', '.png'],
-    'text/csv': ['.csv'],
-    'application/vnd.ms-excel': ['.csv'],
-  },
-  multiple: false,
-  maxFiles: 5,
-  maxSize: 20 * 1024 * 1024,
-} satisfies DropzoneOptions;
+import { applyPhoneMask } from '@services/types/common/Phone';
+import { HyperlinkInput } from '@components/ui/extensions/hyperlink';
+import { ScrollArea } from '@components/ui/scroll-area';
+import { applyCurrencyMask } from '@services/types/common/Currency';
+import { HierarchicalCheckbox } from '@components/ui/extensions/hierarchical-checkbox';
+import { TooltipComponentProvider } from '../tooltip';
+import { useCallback } from 'react';
+import { SmartDatetimeInput } from '@components/ui/extensions/smart-datetime-input';
+import { Slider } from '@components/ui/slider';
 
 export default function DynamicForm<TFieldValues extends FieldValues>({
   hint,
@@ -83,10 +51,14 @@ export default function DynamicForm<TFieldValues extends FieldValues>({
       name={props.name}
       render={({ field }) => (
         <FormItem className={cn('flex flex-col space-y-0.5', props.classnameitem)}>
-          {props.hidelabel ? null : <FormLabel className={cn('mb-1', props.classnamelabel)}>{props.label}</FormLabel>}
+          {props.hidelabel ? null : (
+            <FormLabel className={cn('mb-1', props.type === 'checkbox' && 'text-center', props.classnamelabel)}>
+              {props.label}
+            </FormLabel>
+          )}
           {DynamicComponent({ field, hint, ...props })}
           {props.hidedescription ? null : (
-            <FormDescription className={cn('mb-1', props.classnamedescription)}>{props.description}</FormDescription>
+            <FormDescription className={props.classnamedescription}>{props.description}</FormDescription>
           )}
           {props.hideerrormessage ? null : <FormMessage className={props.classnamemessage} />}
         </FormItem>
@@ -98,51 +70,52 @@ export default function DynamicForm<TFieldValues extends FieldValues>({
 function DynamicComponent<TFieldValues extends FieldValues>({
   hint,
   ...props
-}: DynamicFormType<TFieldValues> & { field: ControllerRenderProps<TFieldValues, Path<TFieldValues>>; hint?: string }) {
-  function dateFormatter(date: Date) {
-    return intlFormat(
-      date,
-      props.type === 'date' && props.format === 'long'
-        ? {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          }
-        : {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-          },
-      {
-        locale: props.type === 'date' ? props.customLocale || 'pt-BR' : 'pt-BR',
-      },
-    );
-  }
+}: DynamicFormType<TFieldValues> & {
+  field: ControllerRenderProps<TFieldValues, Path<TFieldValues>>;
+  hint?: string;
+  format?: 'short' | 'long';
+  customLocale?: string;
+}) {
+  const dateFormatter = useCallback(
+    (date: Date) =>
+      intlFormat(
+        date,
+        props.type === 'date' && props.format === 'long'
+          ? { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+          : { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' },
+        { locale: props.type === 'date' ? props.customLocale || 'pt-BR' : 'pt-BR' },
+      ),
+    [props.type, props.format, props.customLocale],
+  );
+
+  const maskInput = useCallback((mask: BaseInputT['mask'], value: string) => {
+    if (mask === 'cnpj') return applyCNPJMask(value);
+    if (mask === 'cpf') return applyCPFMask(value);
+    if (mask === 'phone') return applyPhoneMask(value);
+    if (mask === 'currency') return applyCurrencyMask(value);
+    if (typeof mask === 'function') return mask(value);
+    return value;
+  }, []);
+
+  const handleCheckboxChange = useCallback(
+    (field: ControllerRenderProps<TFieldValues, Path<TFieldValues>>, id: string, checked: boolean) => {
+      field.onChange(checked ? [...(field.value || []), id] : field.value?.filter((v: string) => v !== id));
+    },
+    [],
+  );
   switch (props.type) {
     case 'password':
-      return (
-        <InputPassword
-          {...props}
-          className={props.className}
-          placeholder={props.placeholder}
-          type="password"
-          {...props.field}
-        />
-      );
+      return <InputPassword {...props} {...props.field} type="password" />;
     case 'number':
       return (
         <FormControl>
           <Input
             {...props}
-            type="number"
-            min={0}
-            step=".01"
-            className={props.className}
-            placeholder={props.placeholder}
-            hint={hint}
             {...props.field}
+            type="number"
+            min={props.allownegative ? undefined : 0}
+            step={props.step ?? '.01'}
+            hint={hint}
             onChange={(e) => props.field.onChange(Number(e.target.value))}
           />
         </FormControl>
@@ -150,124 +123,161 @@ function DynamicComponent<TFieldValues extends FieldValues>({
     case 'textarea':
       return (
         <FormControl>
-          <AutosizeTextarea
-            {...props}
-            className={cn('resize-none', props.className)}
-            placeholder={props.placeholder}
-            {...props.field}
-          />
+          <AutosizeTextarea {...props} {...props.field} className={cn('resize-none', props.className)} />
         </FormControl>
       );
     case 'date':
       return (
-        <>
-          <Popover>
-            <PopoverTrigger asChild>
-              <FormControl>
-                <Button
-                  variant={'outline'}
-                  className={cn(
-                    'w-full pl-3 text-left font-normal',
-                    props.mode === 'single'
-                      ? !props.field.value && 'text-muted-foreground'
-                      : !props.field.value?.from && !props.field.value?.to && 'text-muted-foreground',
-                  )}
-                >
-                  {props.mode === 'single' ? (
-                    props.field.value ? (
-                      dateFormatter(props.field.value)
-                    ) : (
-                      <span>{props.placeholder ?? 'Escolha uma data'}</span>
-                    )
-                  ) : props.field.value?.from ? (
-                    props.field.value.to ? (
-                      `${dateFormatter(props.field.value.from)} - ${dateFormatter(props.field.value.to)}`
-                    ) : (
-                      dateFormatter(props.field.value.from)
-                    )
+        <Popover modal={true}>
+          <PopoverTrigger asChild disabled={props.disabledInput}>
+            <FormControl>
+              <Button
+                variant={'outline'}
+                className={cn(
+                  'w-full pl-3 text-left font-normal',
+                  props.mode === 'single'
+                    ? !props.field.value && 'text-muted-foreground'
+                    : !props.field.value?.from && !props.field.value?.to && 'text-muted-foreground',
+                  props.className,
+                )}
+              >
+                {props.mode === 'single' ? (
+                  props.field.value ? (
+                    dateFormatter(props.field.value)
                   ) : (
-                    <span>{props.placeholder ?? 'Escolha um período'}</span>
-                  )}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                </Button>
-              </FormControl>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                {...props}
-                autoFocus
-                customMode={props.mode || 'single'}
-                customLocale={props.customLocale || 'pt-BR'}
-                selected={props.field.value}
-                numberOfMonths={props.mode === 'range' ? 2 : 1}
-                disabled={{
-                  after: new Date(),
-                  ...(typeof props.disabled === 'object' && props.disabled ? props.disabled : {}),
-                }}
-                onSelect={props.field.onChange}
-              />
-            </PopoverContent>
-          </Popover>
-        </>
+                    <span>{props.placeholder ?? 'Escolha uma data'}</span>
+                  )
+                ) : props.field.value?.from ? (
+                  props.field.value.to ? (
+                    `${dateFormatter(props.field.value.from)} - ${dateFormatter(props.field.value.to)}`
+                  ) : (
+                    dateFormatter(props.field.value.from)
+                  )
+                ) : (
+                  <span>{props.placeholder ?? 'Escolha um período'}</span>
+                )}
+                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+              </Button>
+            </FormControl>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              {...props}
+              autoFocus
+              customMode={props.mode || 'single'}
+              customLocale={props.customLocale || 'pt-BR'}
+              selected={props.field.value}
+              numberOfMonths={props.mode === 'range' ? 2 : 1}
+              disabled={{
+                after: new Date(),
+                ...(typeof props.disabled === 'object' && props.disabled ? props.disabled : {}),
+              }}
+              onSelect={props.field.onChange}
+            />
+          </PopoverContent>
+        </Popover>
       );
+    case 'datetime-input': {
+      return (
+        <FormControl>
+          <SmartDatetimeInput {...props} {...props.field} onValueChange={props.field.onChange} />
+        </FormControl>
+      );
+    }
+    case 'slider': {
+      const value = props.field.value ?? [0];
+      const isRange = value.length === 2;
+      return (
+        <div className="flex w-full min-w-40 flex-col gap-2">
+          {isRange ? (
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex flex-col">
+                <FormLabel htmlFor={props.name}>{props.titles?.[0]}</FormLabel>
+                <span className="text-muted-foreground space-x-1">
+                  {value[0]} {props.unit}
+                </span>
+              </div>
+              <div className="flex flex-col items-end">
+                <FormLabel htmlFor={props.name}>{props.titles?.[1]}</FormLabel>
+                <span className="text-muted-foreground space-x-1">
+                  {value[1]} {props.unit}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <FormLabel htmlFor={props.name}>{props.titles?.[0]}</FormLabel>
+              <span className="text-muted-foreground space-x-1 text-sm">
+                {value[0]} {props.unit}
+              </span>
+            </div>
+          )}
+          <FormControl>
+            <Slider
+              {...props}
+              defaultValue={props.field.value}
+              onValueChange={props.field.onChange}
+              max={props.max ?? 100}
+              min={props.min ?? 0}
+              step={props.step ?? 1}
+              className={cn('flex w-full', props.className)}
+            />
+          </FormControl>
+        </div>
+      );
+    }
     case 'switch': {
       const { type, ...switchRest } = props;
-      console.log(type);
       return (
-        <>
-          <FormControl>
-            <Switch {...switchRest} checked={props.field.value} onCheckedChange={props.field.onChange} aria-readonly />
-          </FormControl>
-        </>
+        <FormControl>
+          <Switch {...switchRest} checked={props.field.value} onCheckedChange={props.field.onChange} aria-readonly />
+        </FormControl>
       );
     }
     case 'select': {
       const { type, ...selectRest } = props;
-      console.log(type);
       return (
-        <>
-          <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
-            <FormControl>
-              <SelectTrigger {...selectRest}>
-                <SelectValue placeholder={props.placeholder ?? 'Selecione uma das opções'} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {props.selectoptions?.map((item) => (
-                <SelectItem key={item.id} value={item.id} disabled={item.disabled}>
-                  {item.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </>
+        <Select onValueChange={props.field.onChange} defaultValue={props.field.value}>
+          <FormControl>
+            <SelectTrigger {...selectRest}>
+              <SelectValue placeholder={props.placeholder ?? 'Selecione uma das opções'} />
+            </SelectTrigger>
+          </FormControl>
+          <SelectContent>
+            {props.selectoptions?.map((item) => (
+              <SelectItem key={item.id} value={item.id} disabled={item.disabled}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       );
     }
     case 'multi-select': {
-      const { type, ...multiSelectRest } = props;
-      console.log(type);
+      const { type, disabledTrigger, itensShown, ...multiSelectRest } = props;
       return (
-        <>
-          <MultiSelector onValuesChange={props.field.onChange} values={props.field.value}>
-            <MultiSelectorTrigger>
-              <MultiSelectorInput {...multiSelectRest} placeholder={props.placeholder ?? 'Selecione suas opções'} />
-            </MultiSelectorTrigger>
-            <MultiSelectorContent>
-              <MultiSelectorList>
-                {props.multiselectoptions?.map((item) => (
-                  <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
-                    <span>{item.label}</span>
-                  </MultiSelectorItem>
-                ))}
-              </MultiSelectorList>
-            </MultiSelectorContent>
-          </MultiSelector>
-        </>
+        <MultiSelector onValuesChange={props.field.onChange} values={props.field.value}>
+          <MultiSelectorTrigger
+            disabledTrigger={disabledTrigger || props.disabled}
+            placeholder={props.disabled ? undefined : (props.placeholder ?? 'Selecione suas opções')}
+            itemsShown={itensShown}
+            itemscount={props.multiselectoptions.filter((item) => !item.disabled).length}
+          />
+          <MultiSelectorContent>
+            <MultiSelectorInput {...multiSelectRest} />
+            <MultiSelectorList itemsCount={props.multiselectoptions.length}>
+              {props.multiselectoptions?.map((item) => (
+                <MultiSelectorItem key={item.id} value={item.label} disabled={item.disabled}>
+                  <span>{item.label}</span>
+                </MultiSelectorItem>
+              ))}
+            </MultiSelectorList>
+          </MultiSelectorContent>
+        </MultiSelector>
       );
     }
     case 'checkbox': {
       const { type, ...checkboxRest } = props;
-      console.log(type);
       return (
         <>
           {props.checkboxoptions?.map((item) => (
@@ -277,20 +287,20 @@ function DynamicComponent<TFieldValues extends FieldValues>({
               name={props.name}
               render={({ field }) => {
                 return (
-                  <FormItem key={item.id} className="flex flex-row items-center space-x-3 space-y-0">
+                  <FormItem key={item.id} className="flex flex-row items-center space-y-0 space-x-3">
                     <FormControl>
                       <Checkbox
                         {...checkboxRest}
                         disabled={props.disabled ? true : item.disabled}
                         checked={field.value?.includes(item.id)}
-                        onCheckedChange={(checked) => {
-                          return checked
-                            ? field.onChange([...field.value, item.id])
-                            : field.onChange(field.value?.filter((value: string) => value !== item.id));
-                        }}
+                        onCheckedChange={(checked: boolean | 'indeterminate') =>
+                          handleCheckboxChange(field, item.id, checked === true)
+                        }
                       />
                     </FormControl>
-                    <FormLabel className={cn(`text-sm font-normal`, item.disabled ? 'text-muted-foreground' : '')}>
+                    <FormLabel
+                      className={cn(`cursor-pointer text-sm font-normal`, item.disabled ? 'text-muted-foreground' : '')}
+                    >
                       {item.label}
                     </FormLabel>
                   </FormItem>
@@ -303,153 +313,179 @@ function DynamicComponent<TFieldValues extends FieldValues>({
     }
     case 'radio':
       return (
-        <>
-          <FormControl>
-            <RadioGroup
-              {...props}
-              onValueChange={props.field.onChange}
-              defaultValue={props.field.value}
-              className={cn('flex flex-col space-y-1', props.className)}
-            >
-              {props.radiooptions.map((item) => (
-                <FormItem key={item.id} className="flex items-center space-x-3 space-y-0">
-                  <FormControl>
-                    <RadioGroupItem value={item.id} disabled={item.disabled} />
-                  </FormControl>
-                  <FormLabel className={`${item.disabled ? 'text-muted-foreground' : 'text-primary'} font-normal`}>
-                    {item.label}
-                  </FormLabel>
-                </FormItem>
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </>
+        <FormControl>
+          <RadioGroup
+            {...props}
+            onValueChange={props.field.onChange}
+            defaultValue={props.field.value}
+            className={cn('flex flex-col space-y-1', props.className)}
+          >
+            {props.radiooptions.map((item) => (
+              <FormItem key={item.id} className="flex items-center space-y-0 space-x-3">
+                <FormControl>
+                  <RadioGroupItem value={item.id} disabled={item.disabled} />
+                </FormControl>
+                <FormLabel className={`${item.disabled ? 'text-muted-foreground' : 'text-primary'} font-normal`}>
+                  {item.label}
+                </FormLabel>
+              </FormItem>
+            ))}
+          </RadioGroup>
+        </FormControl>
       );
     case 'combobox': {
       const { type, handlecustomselect, ...comboboxRest } = props;
-      console.log(type);
       return (
-        <>
-          <Popover>
-            <PopoverTrigger asChild>
-              <FormControl>
-                <Button
-                  {...comboboxRest}
-                  variant="outline"
-                  role="combobox"
-                  className={cn(
-                    `h-9 justify-between text-sm ${!props.field.value && 'font-normal text-muted-foreground'}`,
-                    props.className,
-                  )}
-                >
-                  {props.field.value
-                    ? props.comboboxoptions.find((item) => item.id === props.field.value)?.label
-                    : (props.placeholder ?? 'Selecione uma opção')}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </FormControl>
-            </PopoverTrigger>
-            <PopoverContent className="p-0">
-              <Command>
-                <CommandInput placeholder="Procure aqui" className="h-9" />
-                <CommandList>
-                  <CommandEmpty>{props.optionsnotfoundtext ?? 'Opção não encontrada'}</CommandEmpty>
-                  <CommandGroup>
-                    {props.comboboxoptions.map((item) => (
-                      <CommandItem
-                        key={item.id}
-                        value={item.label}
-                        disabled={item.disabled}
-                        className={props.classNameCommandItem}
-                        onSelect={(value) => {
-                          handlecustomselect?.(value);
-                          props.field.onChange(item.id);
-                        }}
-                      >
-                        {item.label}
-                        <Check className={cn('ml-auto', item.id === props.field.value ? 'opacity-100' : 'opacity-0')} />
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </>
+        <Popover modal={true}>
+          <PopoverTrigger asChild>
+            <FormControl>
+              <Button
+                {...comboboxRest}
+                variant="outline"
+                role="combobox"
+                className={cn(
+                  `h-9 justify-between text-sm ${!props.field.value && 'text-muted-foreground font-normal'}`,
+                  props.className,
+                )}
+              >
+                {props.field.value
+                  ? props.comboboxoptions.find((item) => item.id === props.field.value)?.label
+                  : (props.placeholder ?? 'Selecione uma opção')}
+                <ChevronsUpDown className="opacity-50" />
+              </Button>
+            </FormControl>
+          </PopoverTrigger>
+          <PopoverContent className="p-0">
+            <Command>
+              <CommandInput placeholder="Procure aqui" className="h-9" />
+              <CommandList>
+                <CommandEmpty>{props.optionsnotfoundtext ?? 'Opção não encontrada'}</CommandEmpty>
+                <CommandGroup>
+                  {props.comboboxoptions.map((item) => (
+                    <CommandItem
+                      key={item.id}
+                      value={item.label}
+                      disabled={item.disabled}
+                      className={props.classNameCommandItem}
+                      onSelect={(value) => {
+                        handlecustomselect?.(value);
+                        props.field.onChange(item.id);
+                      }}
+                    >
+                      {item.label}
+                      <Check className={cn('ml-auto', item.id === props.field.value ? 'opacity-100' : 'opacity-0')} />
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
       );
     }
-    case 'file-upload':
+    case 'file-upload': {
+      const { reSelect, ...rest } = props;
       return (
-        <>
-          <FileUploader
-            value={props.field.value}
-            onValueChange={props.field.onChange}
-            dropzoneOptions={{ ...dropzone, ...props.dropzone }}
-            reSelect={true}
-            className={props.className}
-          >
-            <FileInput
-              {...props}
-              className={cn('outline-dashed outline-1 outline-white', props.disabled ? 'opacity-40' : 'opacity-100')}
-            >
-              <div className="flex w-full flex-col items-center justify-center pb-4 pt-3">
-                <FileSvgDraw />
-              </div>
-            </FileInput>
-            {props.field.value && props.field.value.length > 0 && (
-              <FileUploaderContent>
-                {props.field.value.map((file: File, i: number) => (
-                  <FileUploaderItem key={i} index={i}>
-                    <Paperclip className="h-4 w-4 stroke-current" />
-                    <span>{file.name}</span>
-                  </FileUploaderItem>
-                ))}
-              </FileUploaderContent>
+        <FileUploader
+          value={props.field.value}
+          onValueChange={props.field.onChange}
+          dropzoneOptions={props.dropzone}
+          reSelect={reSelect}
+          className={props.className}
+        >
+          <FileInput
+            {...rest}
+            className={cn(
+              'hover:border-primary flex flex-col items-center justify-center rounded-md border-2 border-dashed p-6 transition-colors',
+              props.disabled && 'cursor-not-allowed opacity-40',
             )}
-          </FileUploader>
-        </>
+          >
+            <Upload className="text-muted-foreground h-8 w-8" />
+            <span className="text-muted-foreground mt-2 text-sm">Arraste arquivos ou clique para selecionar</span>
+          </FileInput>
+          {props.field.value && props.field.value.length > 0 && (
+            <div className="mt-1 space-y-1">
+              <ScrollArea
+                className={cn(
+                  'max-h-32 max-w-full min-w-fit rounded-md border p-2',
+                  `h-[${props.field.value.length * 9}px] overflow-y-auto`,
+                )}
+              >
+                <FileUploaderContent>
+                  {props.field.value.map((file: File, i: number) => (
+                    <TooltipComponentProvider key={i} tooltipContent={file.name}>
+                      <FileUploaderItem index={i}>
+                        {file.type.startsWith('image/') ? (
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={file.name}
+                            className="size-6 rounded object-cover"
+                          />
+                        ) : (
+                          <Paperclip className="size-4 stroke-current" />
+                        )}
+                        <span className="max-w-2xs truncate text-sm">{file.name}</span>
+                      </FileUploaderItem>
+                    </TooltipComponentProvider>
+                  ))}
+                </FileUploaderContent>
+              </ScrollArea>
+
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => props.field.onChange([])}
+                className="flex items-center gap-1"
+              >
+                <span className="text-muted-foreground hover:text-destructive cursor-pointer transition-colors">
+                  <Trash2 className="size-4" />
+                </span>
+                Remover todos
+              </Button>
+            </div>
+          )}
+        </FileUploader>
       );
+    }
+    case 'link': {
+      return (
+        <FormControl>
+          <HyperlinkInput
+            {...props}
+            onChange={(e) => props.field.onChange(maskInput(props.mask, e.target.value))}
+            hint={hint}
+          />
+        </FormControl>
+      );
+    }
+    case 'hierarchical': {
+      return (
+        <FormControl>
+          <HierarchicalCheckbox
+            {...props}
+            {...props.field}
+            onChange={(values) => {
+              if (props.onChange) props.onChange(values);
+              props.field.onChange(values);
+            }}
+          />
+        </FormControl>
+      );
+    }
     default: {
       const { mask, ...inputRest } = props;
       return (
-        <>
-          <FormControl>
-            <Input
-              {...inputRest}
-              {...inputRest.field}
-              className={inputRest.className}
-              placeholder={inputRest.placeholder}
-              maxLength={mask === 'phone' ? 15 : undefined}
-              onChange={(e) => {
-                const { value } = e.target;
-                if (mask) {
-                  e.target.value = applyMaskToInput(mask, value);
-                }
-                inputRest.field.onChange(e);
-              }}
-              hint={hint}
-            />
-          </FormControl>
-        </>
+        <FormControl>
+          <Input
+            {...inputRest}
+            {...inputRest.field}
+            maxLength={mask === 'phone' ? 15 : undefined}
+            onChange={(e) => props.field.onChange(maskInput(props.mask, e.target.value))}
+            hint={hint}
+          />
+        </FormControl>
       );
     }
   }
-}
-
-function applyMaskToInput(mask: BaseInputT['mask'], value: string) {
-  if (mask === 'cnpj') {
-    return applyCNPJMask(value);
-  } else if (mask === 'cpf') {
-    return applyCPFMask(value);
-  } else if (mask === 'phone') {
-    return applyPhoneMask(value);
-  } else if (mask === 'ip') {
-    return applyIPMask(value);
-  } else if (mask === 'macAddress') {
-    return applyMacAddressMask(value);
-  } else if (typeof mask === 'function') {
-    return mask(value);
-  }
-  // If mask is undefined or does not match any condition
-  return value;
 }

@@ -3,6 +3,9 @@ import { Outlet, createFileRoute, linkOptions } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_auth/')({
   component: IndexComponent,
+  loader: () => ({
+    crumb: 'Página Inicial',
+  }),
 });
 
 const options: NavigationMenuOptionsType[] = [

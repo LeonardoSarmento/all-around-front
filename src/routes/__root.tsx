@@ -2,7 +2,7 @@ import { ErrorComponent } from '@components/ErrorComponent';
 import { NotFoundComponent } from '@components/NotFoundComponent';
 import { type AuthContext } from '@services/hooks/auth';
 import { QueryClient } from '@tanstack/react-query';
-import { Outlet, ScrollRestoration, createRootRouteWithContext } from '@tanstack/react-router';
+import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import { Toaster } from 'sonner';
 import { DevTools } from '@components/DevTools';
 
@@ -20,10 +20,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
   return (
     <>
-      <div>
-        <ScrollRestoration getKey={(location) => location.pathname} />
-        <Outlet />
-      </div>
+      <Outlet />
       <Toaster richColors closeButton />
       <DevTools />
     </>

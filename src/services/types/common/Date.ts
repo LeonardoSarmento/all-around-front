@@ -1,18 +1,11 @@
 import { z } from 'zod';
 
-export const DateSchema = z.date({
-  required_error: 'A data é obrigatória.',
-});
+export const DateSchema = z.date('A data é obrigatória.');
 export type DateType = z.infer<typeof DateSchema>;
 
 export const DateRangeSchema = z.object(
-  {
-    from: z.date().nullable().optional(),
-    to: z.date().nullable().optional(),
-  },
-  {
-    required_error: 'A data é obrigatória.',
-  },
+  { from: z.date().nullable().optional(), to: z.date().nullable().optional() },
+  { error: 'A data é obrigatória.' },
 );
 export type DateRangeType = z.infer<typeof DateRangeSchema>;
 

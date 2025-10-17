@@ -1,13 +1,8 @@
 import { z } from 'zod';
 
-export type ZodCNPJ = {
-  strict?: boolean;
-  message?: string;
-};
+export type ZodCNPJ = { strict?: boolean; message?: string };
 
-export type ZodCPF = ZodCNPJ & {
-  alternatives?: boolean;
-};
+export type ZodCPF = ZodCNPJ & { alternatives?: boolean };
 
 /*
     CNPJ (Cadastro Nacional da Pessoa Jurídica) is the Brazilian company taxpayer registry identification.
@@ -29,10 +24,7 @@ export const applyCNPJMask = (value: string) => {
     .slice(0, 18); // Limita o tamanho máximo
 };
 
-const defaultOptions: ZodCNPJ = {
-  message: 'CNPJ inválido',
-  strict: false,
-};
+const defaultOptions: ZodCNPJ = { message: 'CNPJ inválido', strict: false };
 
 const cnpj = (options?: ZodCNPJ) =>
   z.custom<string>(
@@ -54,9 +46,7 @@ const cnpj = (options?: ZodCNPJ) =>
 
       return strictValidations(sanitizedCnpj);
     },
-    {
-      message: options?.message || defaultOptions.message,
-    },
+    { message: options?.message || defaultOptions.message },
   );
 
 const strictValidations = (digits: string) => {

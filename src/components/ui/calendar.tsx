@@ -1,12 +1,16 @@
 'use client';
 
-import { Button, buttonVariants } from '@components/ui/button';
-import { cn } from '@/lib/utils';
+import * as React from 'react';
+
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import * as React from 'react';
-import { DayPicker, labelNext, labelPrevious, useDayPicker, type DayPickerProps } from 'react-day-picker';
 import { enUS, fr, ptBR, es, zhCN } from 'react-day-picker/locale';
+import { DayPicker, labelNext, labelPrevious, useDayPicker, type DayPickerProps } from 'react-day-picker';
+
+
+import { Button, buttonVariants } from './button';
+
+import { cn } from '../../lib/utils';
 import { DateLocaleSchema, DateLocaleType, ModeSchemaType } from '@services/types/common/Date';
 
 export type CalendarProps = DayPickerProps & {
@@ -16,13 +20,7 @@ export type CalendarProps = DayPickerProps & {
    */
   yearRange?: number;
 };
-const localeMap = {
-  'pt-BR': ptBR,
-  'en-US': enUS,
-  'zh-CN': zhCN,
-  fr: fr,
-  es: es,
-};
+const localeMap = { 'pt-BR': ptBR, 'en-US': enUS, 'zh-CN': zhCN, fr: fr, es: es };
 
 function Calendar({
   className,
@@ -30,21 +28,15 @@ function Calendar({
   showOutsideDays = true,
   yearRange = 12,
   numberOfMonths,
-  customLocale = DateLocaleSchema.Enum['pt-BR'],
+  customLocale = DateLocaleSchema.enum['pt-BR'],
   customMode = 'single',
   ...props
 }: CalendarProps & { customLocale?: DateLocaleType; customMode?: ModeSchemaType }) {
   const [navView, setNavView] = React.useState<'days' | 'years'>('days');
-  const [displayYears, setDisplayYears] = React.useState<{
-    from: number;
-    to: number;
-  }>(
+  const [displayYears, setDisplayYears] = React.useState<{ from: number; to: number }>(
     React.useMemo(() => {
       const currentYear = new Date().getFullYear();
-      return {
-        from: currentYear - Math.floor(yearRange / 2 - 1),
-        to: currentYear + Math.ceil(yearRange / 2),
-      };
+      return { from: currentYear - Math.floor(yearRange / 2 - 1), to: currentYear + Math.ceil(yearRange / 2) };
     }, [yearRange]),
   );
 
@@ -58,9 +50,7 @@ function Calendar({
       locale={localeMap[customLocale]}
       showOutsideDays={showOutsideDays}
       className={cn('p-3', className)}
-      style={{
-        width: 248.8 * (columnsDisplayed ?? 1) + 'px',
-      }}
+      style={{ width: 248.8 * (columnsDisplayed ?? 1) + 'px' }}
       classNames={{
         months: 'flex relative',
         month_caption: 'flex justify-center h-7 mx-10 relative items-center',
@@ -84,7 +74,7 @@ function Calendar({
         nav: 'flex items-start',
         month_grid: 'mt-4',
         week: 'flex w-full mt-2',
-        day: 'p-0 size- text-sm flex-1 flex items-center justify-center has-[button]:hover:!bg-accent rounded-md has-[button]:hover:aria-selected:!bg-primary has-[button]:hover:text-accent-foreground has-[button]:hover:aria-selected:text-primary-foreground',
+        day: 'p-0 size- text-sm flex-1 flex items-center justify-center has-[button]:hover:bg-accent! rounded-md has-[button]:hover:aria-selected:bg-primary! has-[button]:hover:text-accent-foreground has-[button]:hover:aria-selected:text-primary-foreground',
         day_button: cn(
           buttonVariants({ variant: 'ghost' }),
           'size-8 p-0 font-normal transition-none hover:bg-transparent hover:text-inherit aria-selected:opacity-100',
@@ -92,13 +82,13 @@ function Calendar({
         range_start: 'day-range-start rounded-s-md',
         range_end: 'day-range-end rounded-e-md',
         selected:
-          'bg-primary text-primary-foreground hover:!bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
+          'bg-primary text-primary-foreground hover:bg-primary! hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
         today: 'bg-accent text-primary',
         outside:
           'day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30',
         disabled: 'text-muted-foreground opacity-50',
         range_middle:
-          'aria-selected:bg-accent hover:aria-selected:!bg-accent rounded-none aria-selected:text-accent-foreground hover:aria-selected:text-accent-foreground',
+          'aria-selected:bg-accent hover:aria-selected:bg-accent! rounded-none aria-selected:text-accent-foreground hover:aria-selected:text-accent-foreground',
         hidden: 'invisible',
         ...classNames,
       }}
@@ -195,7 +185,7 @@ function Calendar({
         },
         CaptionLabel: ({ children }) => (
           <Button
-            className="h-7 w-full truncate text-sm font-medium"
+            className="h-7 w-full truncate text-sm font-medium capitalize"
             variant="ghost"
             size="sm"
             onClick={() => setNavView((prev) => (prev === 'days' ? 'years' : 'days'))}
@@ -218,9 +208,9 @@ function Calendar({
                     <Button
                       key={i}
                       className={cn(
-                        'h-7 w-full text-sm font-normal text-foreground',
+                        'text-foreground h-7 w-full text-sm font-normal',
                         displayYears.from + i === new Date().getFullYear() &&
-                          'bg-accent font-medium text-accent-foreground',
+                          'bg-accent text-accent-foreground font-medium',
                       )}
                       variant="ghost"
                       onClick={() => {

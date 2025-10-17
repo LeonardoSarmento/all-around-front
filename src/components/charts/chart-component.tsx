@@ -51,7 +51,7 @@ const chartConfig: ChartConfig = {
   },
 };
 
-export function CustomChartComponent(): JSX.Element {
+export function CustomChartComponent(): React.JSX.Element {
   const [chartData, setChartData] = useState<DataPoint[]>([]);
   const [range, setRange] = useState({ left: 0, right: 0 });
   const [selection, setSelection] = useState<{ left: number | null; right: number | null}>({ left: null, right: null });

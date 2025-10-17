@@ -4,7 +4,7 @@ import { useAuth } from './auth';
 
 export function RoleGuard({ children }: PropsWithChildren) {
   const user = useAuth();
-  const allowedRoles: string[] = [roleSchema.Enum.ADMIN];
+  const allowedRoles: string[] = [roleSchema.enum.ADMIN];
 
   return allowedRoles.some((role) => role === user.roleCode) ? <>{children}</> : null;
 }

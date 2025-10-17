@@ -6,6 +6,9 @@ import { calendarConfig } from '@components/calendar/calender-config';
 
 export const Route = createFileRoute('/_auth/calendar/')({
   component: CalendarComponent,
+  loader: () => ({
+    crumb: 'Calendário V1',
+  }),
 });
 
 function CalendarComponent() {
